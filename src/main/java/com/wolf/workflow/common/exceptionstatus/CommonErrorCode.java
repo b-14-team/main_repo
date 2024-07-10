@@ -11,6 +11,6 @@ public enum CommonErrorCode implements ErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name()),
     ;
 
-    private final int httpCode;
-    private final String httpCodeName;
+    private final int statusCode;
+    private final String reasonPhrase;
 }
