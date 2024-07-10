@@ -1,5 +1,6 @@
 package com.wolf.workflow.card.entity;
 
+import com.wolf.workflow.card.dto.request.CardRequestDto;
 import com.wolf.workflow.column.entity.Columns;
 import com.wolf.workflow.common.Timestamped;
 import jakarta.persistence.*;
@@ -36,11 +37,22 @@ public class Card extends Timestamped {
     private Columns columns;
 
     @Builder
-    Card(String title, String content, Long assigneeId, LocalDateTime deadDate) {
+    private Card(String title, String content, Long assigneeId, LocalDateTime deadDate,Columns columns) {
         this.title = title;
         this.content = content;
         this.assigneeId = assigneeId;
         this.deadDate = deadDate;
+        this.columns = columns;
+    }
+
+    public static Card saveCard(CardRequestDto requestDto, Columns columns) {
+        return Card.builder()
+                .title(requestDto.getTitle())
+                .content(requestDto.getContent())
+                .assigneeId(requestDto.getAssigneeId())
+                .deadDate(requestDto.getDeadDate())
+                .columns(columns)
+                .build();
     }
 
 
