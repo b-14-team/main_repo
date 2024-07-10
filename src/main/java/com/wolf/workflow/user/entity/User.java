@@ -1,5 +1,6 @@
 package com.wolf.workflow.user.entity;
 
+import com.wolf.workflow.board.entity.BoardUser;
 import com.wolf.workflow.comment.entity.Comment;
 import com.wolf.workflow.common.Timestamped;
 import jakarta.persistence.*;
@@ -37,10 +38,6 @@ public class User extends Timestamped {
 
     @OneToMany(mappedBy = "user")
     private List<BoardUser> boardUserList = new ArrayList<>();
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole userRole;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

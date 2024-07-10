@@ -1,4 +1,4 @@
-package com.wolf.workflow.user.entity;
+package com.wolf.workflow.board.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
