@@ -15,7 +15,7 @@ public class BoardUserAdapter {
     private final BoardUserRepository boardUserRepository;
     private final MessageSource messageSource;
 
-    public BoardUser findBoardUserById(Long id) {
+    public BoardUser getBoardByUserById(Long id) {
        return boardUserRepository.findById(id).orElseThrow(()->
                new NotFoundBoardUserException(messageSource.getMessage("not.find.boardUser",null, Locale.getDefault()))
        );

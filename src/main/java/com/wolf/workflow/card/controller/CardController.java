@@ -6,10 +6,13 @@ import com.wolf.workflow.card.dto.response.CardResponseDto;
 import com.wolf.workflow.card.dto.response.CardUpdateResponseDto;
 import com.wolf.workflow.card.service.CardService;
 import com.wolf.workflow.common.globalresponse.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/cards")
 public class CardController {
@@ -22,8 +25,9 @@ public class CardController {
      * @param columnId
      * @return CardResponseDto
      */
+    @ResponseBody
     @PostMapping("/{columnId}")
-    public ApiResponse<CardResponseDto> createCard(@RequestBody CardRequestDto requestDto, @PathVariable Long columnId) {
+    public ApiResponse<CardResponseDto> createCard(@Valid @RequestBody CardRequestDto requestDto, @PathVariable Long columnId) {
 
         CardResponseDto cardResponseDto = cardService.createCard(requestDto,columnId);
 
@@ -37,8 +41,9 @@ public class CardController {
      * @return CardUpdateResponseDto
      *
      */
+    @ResponseBody
     @PatchMapping("/{cardId}")
-    public ApiResponse<CardUpdateResponseDto> updateCard(@RequestBody CardUpdateRequestDto requestDto, @PathVariable Long cardId) {
+    public ApiResponse<CardUpdateResponseDto> updateCard(@Valid @RequestBody CardUpdateRequestDto requestDto, @PathVariable Long cardId) {
 
         CardUpdateResponseDto cardUpdateResponseDto = cardService.updateCard(requestDto,cardId);
 

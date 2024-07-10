@@ -43,7 +43,7 @@ public class CardService {
         // assigneeId가 있는 경우
         if (Objects.nonNull(requestDto.getAssigneeId())) {
             // assigneeId로 보드유저 찾아오기
-            BoardUser boardUser = boardUserAdapter.findBoardUserById(requestDto.getAssigneeId());
+            BoardUser boardUser = boardUserAdapter.getBoardByUserById(requestDto.getAssigneeId());
             //카드 생성후 저장
             Card card = Card.createCard(requestDto, columns);
             cardAdapter.createCard(card);
@@ -75,7 +75,7 @@ public class CardService {
         // assigneeId가 있는 경우
         if (Objects.nonNull(requestDto.getAssigneeId())) {
             // assigneeId로 보드유저 찾아오기
-            BoardUser boardUser = boardUserAdapter.findBoardUserById(requestDto.getAssigneeId());
+            BoardUser boardUser = boardUserAdapter.getBoardByUserById(requestDto.getAssigneeId());
             // 업데이트
             card.updateCard(requestDto.getTitle(),requestDto.getContent(),requestDto.getAssigneeId(),requestDto.getDeadDate());
             //ResponseDto 생성
