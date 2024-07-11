@@ -24,15 +24,23 @@ public class CardAdapter {
 
     public Card getCardById(Long cardId) {
 
-        return cardRepository.findById(cardId).orElseThrow(()->
-            new NotFoundCardException(messageSource.getMessage("not.find.card",null, Locale.getDefault()))
-                );
+        return cardRepository.findById(cardId).orElseThrow(() ->
+                new NotFoundCardException(messageSource.getMessage("not.find.card", null, Locale.getDefault()))
+        );
     }
 
     public List<Card> getAllCards() {
         List<Card> cardList = cardRepository.findAll();
         if (cardList.isEmpty()) {
-            throw new NotFoundCardListException(messageSource.getMessage("not.find.cardList",null,Locale.getDefault()));
+            throw new NotFoundCardListException(messageSource.getMessage("not.find.cardList", null, Locale.getDefault()));
+        }
+        return cardList;
+    }
+
+    public List<Card> getCardsByAssigneeId(Long assigneeId) {
+        List<Card> cardList = cardRepository.findByAssigneeId(assigneeId);
+        if (cardList.isEmpty()) {
+            throw new NotFoundCardListException(messageSource.getMessage("not.find.cardList", null, Locale.getDefault()));
         }
         return cardList;
     }

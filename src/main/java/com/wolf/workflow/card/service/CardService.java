@@ -3,12 +3,9 @@ package com.wolf.workflow.card.service;
 import com.wolf.workflow.board.adapter.BoardUserAdapter;
 import com.wolf.workflow.board.entity.BoardUser;
 import com.wolf.workflow.card.adapter.CardAdapter;
-import com.wolf.workflow.card.dto.request.CardRequestDto;
+import com.wolf.workflow.card.dto.request.CardCreateRequestDto;
 import com.wolf.workflow.card.dto.request.CardUpdateRequestDto;
-import com.wolf.workflow.card.dto.response.CardCreateResponseDto;
-import com.wolf.workflow.card.dto.response.CardGetAllResponseDto;
-import com.wolf.workflow.card.dto.response.CardGetResponseDto;
-import com.wolf.workflow.card.dto.response.CardUpdateResponseDto;
+import com.wolf.workflow.card.dto.response.*;
 import com.wolf.workflow.card.entity.Card;
 import com.wolf.workflow.column.adapter.ColumnAdapter;
 import com.wolf.workflow.column.entity.Columns;
@@ -42,7 +39,7 @@ public class CardService {
      * @throws NotFoundBoardUserException assigneeId 에 맞는 보드유저가 없을 때
      */
 
-    public CardCreateResponseDto createCard(CardRequestDto requestDto, Long columnId) {
+    public CardCreateResponseDto createCard(CardCreateRequestDto requestDto, Long columnId) {
 
         // columId로 칼럼 찾아오기
         Columns columns = columnAdapter.findColumnsById(columnId);
@@ -129,10 +126,10 @@ public class CardService {
      * 카드 전체 조회
      *
      * @return List<CardGetAllResponseDto>
-     * @throws NotFoundCardListException 조회할 카드가 없을 때
+     * @throws NotFoundCardListException  조회할 카드가 없을 때
      * @throws NotFoundBoardUserException assigneeId가 있는데 보드유저를 찾을 수 없을 때
      */
-    public List<CardGetAllResponseDto> getAllCard() {
+    public List<CardGetAllResponseDto> getAllCards() {
 
         List<Card> cards = cardAdapter.getAllCards();
         List<CardGetAllResponseDto> cardGetAllResponseDtoList = new ArrayList<>();
@@ -149,5 +146,30 @@ public class CardService {
         }
 
         return cardGetAllResponseDtoList;
+    }
+
+    /**
+     * 담당자별 카드조회
+     *
+     * @param assigneeId
+     * @return List<CardsGetByAssigneeId>
+     * @throws NotFoundCardListException 조회할 카드가 없을 때
+     * @throws NotFoundBoardUserException assigneeId가 있는데 보드유저를 찾을 수 없을 때
+     */
+    public List<CardsGetByAssigneeId> getCardsByAssigneeId(Long assigneeId) {
+
+        List<Card> cards = cardAdapter.getCardsByAssigneeId(assigneeId);
+        List<CardsGetByAssigneeId> cardsGetByAssigneeIdList = new ArrayList<>();
+
+        // assigneeId가 있는 카드의 경우만 조회하면 됨
+        for (Card card : cards) {
+            // assigneeId가 있는 카드의 경우
+            if (Objects.nonNull(card.getAssigneeId())) {
+                BoardUser boardUser = boardUserAdapter.getBoardByUserById(card.getAssigneeId());
+                cardsGetByAssigneeIdList.add(CardsGetByAssigneeId.of(card, card.getColumns(), boardUser.getUser().getNickName()));
+            }
+        }
+
+        return cardsGetByAssigneeIdList;
     }
 }
