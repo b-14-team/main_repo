@@ -40,6 +40,6 @@ public class Columns extends Timestamped {
     private Board board;
 
     @OneToMany(mappedBy = "columns")
-    private List<Card> cardList = new LinkedList<>();
+    private List<Card> cardList = new ArrayList<>();
 
 }
