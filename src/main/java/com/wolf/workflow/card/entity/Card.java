@@ -1,7 +1,6 @@
 package com.wolf.workflow.card.entity;
 
 import com.wolf.workflow.card.dto.request.CardRequestDto;
-import com.wolf.workflow.card.dto.request.CardUpdateRequestDto;
 import com.wolf.workflow.column.entity.Columns;
 import com.wolf.workflow.common.Timestamped;
 import jakarta.persistence.*;
@@ -9,11 +8,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.thymeleaf.util.StringUtils;
-
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Getter
