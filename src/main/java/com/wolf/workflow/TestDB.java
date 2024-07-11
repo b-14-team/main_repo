@@ -1,6 +1,7 @@
 package com.wolf.workflow;
 
 import com.wolf.workflow.user.entity.User;
+import com.wolf.workflow.user.entity.UserRole;
 import com.wolf.workflow.user.entity.UserStatus;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -40,6 +41,7 @@ public class TestDB {
                     .nickName("닉네임이요~~")
                     .description("한줄 소개")
                     .userStatus(UserStatus.ENABLE)
+                    .userRole(UserRole.USER)
                     .build();
             save(consumer);
         }
@@ -52,4 +54,3 @@ public class TestDB {
         }
     }
 }
-

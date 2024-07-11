@@ -8,8 +8,6 @@ import com.wolf.workflow.user.entity.UserStatus;
 import com.wolf.workflow.user.repository.UserRepository;
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.bridge.Message;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -54,6 +52,20 @@ public class UserAdapter {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundUserException(
                         MessageUtil.getMessage("not.found.user")));
+    }
+
+
+    /**
+     * 사용자 ID로 사용자가 존재하는지 확인합니다.
+     *
+     * @param userId 검색할 사용자 ID
+     * @throws NotFoundUserException 사용자를 찾을 수 없는 경우 발생하는 예외
+     */
+    public void existsById(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundUserException(MessageUtil.getMessage("not.found.user")
+            );
+        }
     }
 
     public void createUser(User user) {
