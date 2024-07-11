@@ -57,8 +57,6 @@ public class User extends Timestamped {
         this.userStatus = userStatus;
     }
 
-    @Builder
-
     public static User createUser(UserSignupRequestDto requestDto) {
         return User.builder()
                 .email(requestDto.getEmail())
