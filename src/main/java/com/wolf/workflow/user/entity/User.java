@@ -35,11 +35,18 @@ public class User extends Timestamped {
 
     private String description;
 
+    @Column(columnDefinition = "TEXT")
+    private String refreshToken;
+
     @OneToMany(mappedBy = "user")
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<BoardUser> boardUserList = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole userRole;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -69,5 +76,9 @@ public class User extends Timestamped {
 
     public void updateStatus() {
         this.userStatus = UserStatus.DISABLE;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

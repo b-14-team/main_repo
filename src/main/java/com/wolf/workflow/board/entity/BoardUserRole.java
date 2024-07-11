@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum BoardUserRole {
-    CONSUMER("USER"),
-    MANAGER("MANAGER"),
+    ASSIGNEE("ASSIGNEE"),
+    GENERAL_MANAGER("GENERAL_MANAGER"),
     ;
 
-    private final String userRoleName;
+    private final String boardUserRoleName;
 }
 
