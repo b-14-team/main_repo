@@ -3,10 +3,12 @@ package com.wolf.workflow.card.adapter;
 import com.wolf.workflow.card.entity.Card;
 import com.wolf.workflow.card.repository.CardRepository;
 import com.wolf.workflow.common.exception.NotFoundCardException;
+import com.wolf.workflow.common.exception.NotFoundCardListException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Locale;
 
 @Component
@@ -25,5 +27,13 @@ public class CardAdapter {
         return cardRepository.findById(cardId).orElseThrow(()->
             new NotFoundCardException(messageSource.getMessage("not.find.card",null, Locale.getDefault()))
                 );
+    }
+
+    public List<Card> getAllCards() {
+        List<Card> cardList = cardRepository.findAll();
+        if (cardList.isEmpty()) {
+            throw new NotFoundCardListException(messageSource.getMessage("not.find.cardList",null,Locale.getDefault()));
+        }
+        return cardList;
     }
 }

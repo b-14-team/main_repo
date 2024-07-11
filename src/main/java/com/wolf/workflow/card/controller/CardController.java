@@ -3,6 +3,7 @@ package com.wolf.workflow.card.controller;
 import com.wolf.workflow.card.dto.request.CardRequestDto;
 import com.wolf.workflow.card.dto.request.CardUpdateRequestDto;
 import com.wolf.workflow.card.dto.response.CardCreateResponseDto;
+import com.wolf.workflow.card.dto.response.CardGetAllResponseDto;
 import com.wolf.workflow.card.dto.response.CardUpdateResponseDto;
 import com.wolf.workflow.card.dto.response.CardGetResponseDto;
 import com.wolf.workflow.card.service.CardService;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/cards")
@@ -23,6 +26,7 @@ public class CardController {
 
     /**
      * 카드 생성
+     *
      * @param requestDto
      * @param columnId
      * @return CardResponseDto
@@ -39,6 +43,7 @@ public class CardController {
 
     /**
      * 카드 업데이트
+     *
      * @param requestDto
      * @param cardId
      * @return CardUpdateResponseDto
@@ -56,6 +61,7 @@ public class CardController {
 
     /**
      * 카드 단일조회
+     *
      * @param cardId
      * @return CardGetResponseDto
      */
@@ -67,5 +73,20 @@ public class CardController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.of(cardGetResponseDto));
+    }
+
+    /**
+     * 모든 카드 조회
+     *
+     * @return List<CardGetResponseDto>
+     */
+    @ResponseBody
+    @GetMapping("/cards")
+    public ResponseEntity<ApiResponse<List<CardGetAllResponseDto>>> getAllCard() {
+
+        List<CardGetAllResponseDto> cardGetAllResponseDto = cardService.getAllCard();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.of(cardGetAllResponseDto));
     }
 }
