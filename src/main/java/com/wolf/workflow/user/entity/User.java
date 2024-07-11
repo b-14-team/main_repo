@@ -3,8 +3,10 @@ package com.wolf.workflow.user.entity;
 import com.wolf.workflow.board.entity.BoardUser;
 import com.wolf.workflow.comment.entity.Comment;
 import com.wolf.workflow.common.Timestamped;
+import com.wolf.workflow.user.dto.request.UserSignupRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -43,4 +45,31 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private UserStatus userStatus;
 
+    @Builder
+    public User(String email, String password, String nickName, String description,
+            List<Comment> commentList, List<BoardUser> boardUserList, UserStatus userStatus) {
+        this.email = email;
+        this.password = password;
+        this.nickName = nickName;
+        this.description = description;
+        this.commentList = commentList;
+        this.boardUserList = boardUserList;
+        this.userStatus = userStatus;
+    }
+
+    @Builder
+
+    public static User createUser(UserSignupRequestDto requestDto) {
+        return User.builder()
+                .email(requestDto.getEmail())
+                .password(requestDto.getPassword())
+                .nickName(requestDto.getNickName())
+                .description(requestDto.getDescription())
+                .userStatus(UserStatus.ENABLE)
+                .build();
+    }
+
+    public void updateStatus() {
+        this.userStatus = UserStatus.DISABLE;
+    }
 }

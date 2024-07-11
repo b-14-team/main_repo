@@ -4,6 +4,7 @@ import com.wolf.workflow.board.entity.Board;
 import com.wolf.workflow.card.entity.Card;
 import com.wolf.workflow.common.Timestamped;
 import jakarta.persistence.*;
+import java.util.LinkedList;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,6 @@ public class Columns extends Timestamped {
     private Board board;
 
     @OneToMany(mappedBy = "columns")
-    private List<Card> cardList = new ArrayList<>();
+    private List<Card> cardList = new LinkedList<>();
 
 }
