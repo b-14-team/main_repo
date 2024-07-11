@@ -4,6 +4,7 @@ import com.wolf.workflow.card.adapter.CardAdapter;
 import com.wolf.workflow.card.entity.Card;
 import com.wolf.workflow.comment.adapter.CommentAdapter;
 import com.wolf.workflow.comment.dto.request.CommentCreateRequestDto;
+import com.wolf.workflow.comment.dto.request.CommentDeleteRequestDto;
 import com.wolf.workflow.comment.dto.request.CommentUpdateRequestDto;
 import com.wolf.workflow.comment.dto.response.CommentCreateResponseDto;
 import com.wolf.workflow.comment.dto.response.CommentGetResponseDto;
@@ -89,5 +90,18 @@ public class CommentService {
         comment.updateComment(requestDto);
 
         return CommentUpdateResponseDto.of(comment);
+    }
+
+    @Transactional
+    public void deleteComment(CommentDeleteRequestDto requestDto, Long commentId) {
+
+        // 댓글 ID로 검색
+        Comment comment = commentAdapter.getCommentById(commentId);
+
+        // 사용자 ID로 존재 여부 확인
+        userAdapter.existsById(requestDto.getUserId());
+
+        // 댓글 삭제
+        commentAdapter.deleteComment(comment);
     }
 }

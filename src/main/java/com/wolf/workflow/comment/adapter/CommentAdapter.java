@@ -21,6 +21,10 @@ public class CommentAdapter {
         commentRepository.save(comment);
     }
 
+    public void deleteComment(Comment comment) {
+        commentRepository.delete(comment);
+    }
+
     public List<Comment> getAllCommentsByCardId(Long cardId) {
         return commentRepository.findAllByCardId(cardId);
     }
@@ -33,5 +37,16 @@ public class CommentAdapter {
                                 null,
                                 Locale.getDefault()))
         );
+    }
+
+    public void existsById(Long commentId) {
+        if (!commentRepository.existsById(commentId)) {
+            throw new NotFoundCommentException((
+                    messageSource.getMessage(
+                            "not.find.comment",
+                            null,
+                            Locale.getDefault()))
+            );
+        }
     }
 }

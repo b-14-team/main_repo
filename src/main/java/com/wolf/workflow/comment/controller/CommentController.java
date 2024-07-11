@@ -1,6 +1,7 @@
 package com.wolf.workflow.comment.controller;
 
 import com.wolf.workflow.comment.dto.request.CommentCreateRequestDto;
+import com.wolf.workflow.comment.dto.request.CommentDeleteRequestDto;
 import com.wolf.workflow.comment.dto.request.CommentUpdateRequestDto;
 import com.wolf.workflow.comment.dto.response.CommentCreateResponseDto;
 import com.wolf.workflow.comment.dto.response.CommentGetResponseDto;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,11 +55,13 @@ public class CommentController {
      * @param cardId 댓글을 조회할 카드
      * @return 카드에 해당하는 모든 댓글 리스트
      */
+    @ResponseBody
     @GetMapping("/{cardId}")
     public ResponseEntity<ApiResponse<List<CommentGetResponseDto>>> getAllComment(
             @PathVariable Long cardId
     ) {
         List<CommentGetResponseDto> responseDtoList = commentService.getAllComments(cardId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.of(responseDtoList));
     }
@@ -69,13 +73,33 @@ public class CommentController {
      * @param commentId  수정할 댓글
      * @return 수정된 댓글 id, 사용자 id, 카드 id, 댓글 내용, 작성 시간, 수정 시간
      */
+    @ResponseBody
     @PatchMapping("/{commentId}")
     public ResponseEntity<ApiResponse<CommentUpdateResponseDto>> updateComment(
             @RequestBody CommentUpdateRequestDto requestDto,
             @PathVariable Long commentId
     ) {
         CommentUpdateResponseDto responseDto = commentService.updateComment(requestDto, commentId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.of(responseDto));
+    }
+
+    /**
+     * 댓글 삭제
+     *
+     * @param commentId 삭제할 댓글
+     * @return 삭제되었다는 메세지 알림
+     */
+    @ResponseBody
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<ApiResponse<String>> deleteComment(
+            @RequestBody CommentDeleteRequestDto requestDto,
+            @PathVariable Long commentId
+    ) {
+        commentService.deleteComment(requestDto, commentId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.of("댓글이 삭제되었습니다."));
     }
 }
