@@ -94,7 +94,7 @@ public class CardController {
      * @return List<CardsGetByAssigneeId>
      */
     @ResponseBody
-    @GetMapping("/{assigneeId}")
+    @GetMapping("/assignee/{assigneeId}")
     public ResponseEntity<ApiResponse<List<CardsGetByAssigneeId>>> getCardsByAssigneeId(@PathVariable Long assigneeId) {
 
         List<CardsGetByAssigneeId> cardsGetByAssigneeIdList = cardService.getCardsByAssigneeId(assigneeId);
@@ -109,7 +109,7 @@ public class CardController {
      * @return List<CardsGetByColumnId>
      */
     @ResponseBody
-    @GetMapping("/{columnId}")
+    @GetMapping("/column/{columnId}")
     public ResponseEntity<ApiResponse<List<CardsGetByColumnId>>> getCardsByColumId(@PathVariable Long columnId) {
 
         List<CardsGetByColumnId> cardsGetByColumnIdList = cardService.getCardsByColumnId(columnId);

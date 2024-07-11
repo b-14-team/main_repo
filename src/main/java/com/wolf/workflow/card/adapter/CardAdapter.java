@@ -46,7 +46,7 @@ public class CardAdapter {
     }
 
     public List<Card> getCardsByColumnId(Long columnId) {
-        List<Card> cardList = cardRepository.findByColumnId(columnId);
+        List<Card> cardList = cardRepository.findByColumnsId(columnId);
         if (cardList.isEmpty()) {
             throw new NotFoundCardListException(messageSource.getMessage("not.find.cardList", null, Locale.getDefault()));
         }
