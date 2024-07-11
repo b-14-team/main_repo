@@ -7,6 +7,8 @@ import com.wolf.workflow.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class BoardUserAdapter {
@@ -16,5 +18,9 @@ public class BoardUserAdapter {
        return boardUserRepository.findById(id).orElseThrow(()->
                new NotFoundBoardUserException(MessageUtil.getMessage("not.find.boardUser"))
        );
+    }
+
+    public List<BoardUser> getBoardUsersByIds(List<Long> ids) {
+        return boardUserRepository.findAllByIdIn(ids);
     }
 }

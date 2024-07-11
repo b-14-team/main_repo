@@ -20,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +38,7 @@ public class CardService {
      * @param requestDto
      * @param columnId
      * @return cardResponseDto
-     * @throws NotFoundColumnException columnId에 맞는 column이 없을 때
+     * @throws NotFoundColumnException    columnId에 맞는 column이 없을 때
      * @throws NotFoundBoardUserException assigneeId 에 맞는 보드유저가 없을 때
      */
 
@@ -74,7 +76,7 @@ public class CardService {
      * @param requestDto
      * @param cardId
      * @return CardUpdateResponseDto
-     * @throws NotFoundCardException 카드아이디로 카드를 찾을 수 없을 때
+     * @throws NotFoundCardException      카드아이디로 카드를 찾을 수 없을 때
      * @throws NotFoundBoardUserException RequestDto에 assigneeId가 있는데 보드유저를 찾을 수 없을 때
      */
     @Transactional
@@ -111,7 +113,7 @@ public class CardService {
      *
      * @param cardId
      * @return CardGetResponseDto
-     * @throws NotFoundCardException 카드아이디로 카드를 찾을 수 없을 때
+     * @throws NotFoundCardException      카드아이디로 카드를 찾을 수 없을 때
      * @throws NotFoundBoardUserException assigneeId가 있는데 보드유저를 찾을 수 없을 때
      */
 
@@ -142,46 +144,44 @@ public class CardService {
      */
     public List<CardGetAllResponseDto> getAllCards(int page, int size) {
 
-        //페이징 처리
+        // 페이징 처리 및 카드 가져오기
         Pageable pageable = PageRequest.of(page, size);
         List<Card> cards = cardAdapter.getAllCards(pageable);
-
-
+        // 리스폰스 List 생성
         List<CardGetAllResponseDto> cardGetAllResponseDtoList = new ArrayList<>();
 
-        //assigneeId 리스트 뽑아오기
-        List<Long> assigneeIds = cards.stream().map(Card::getAssigneeId).toList();
+        //assigneeId 리스트 뽑아오기 및 assigneeId로 BoardUser 리스트 가져오기
+        List<Long> assigneeIds = cards.stream().filter(c -> c.getAssigneeId() != null)
+                .map(Card::getAssigneeId).toList();
+        List<BoardUser> boardUsers = boardUserAdapter.getBoardUsersByIds(assigneeIds);
 
-        for (Long assigneeId : assigneeIds) {
-
-        }
-
-
-        // 1. assigneeIds 를 가지고 보드유저 리스트를 가져오는 방법찾기
-        // 2. 카드리스트에서 각 assignee의 유저정보를 가져오려면 보드유저 리스트를 어떤 형태로 구현해야 추가 DB 조회없이 가져올 수 있을까?
-        // 3. 카드아답터.getAllCards 바꾸기 -> 페이징 처리하기
+        Map<Long, BoardUser> boardUserMap = boardUsers.stream()
+                .collect(Collectors.toMap(bu -> bu.getUser().getId(),
+                        bu -> bu));
 
         for (Card card : cards) {
-            // assigneeId가 있는 카드의 경우
-            if (Objects.nonNull(card.getAssigneeId())) {
-                BoardUser boardUser = boardUserAdapter.getBoardUserById(card.getAssigneeId());
-                cardGetAllResponseDtoList.add(CardGetAllResponseDto.of(card, card.getColumns(), boardUser.getUser().getNickName()));
-            } else {
-                // assigneeId가 없는 카드의 경우
-                cardGetAllResponseDtoList.add(CardGetAllResponseDto.of(card, card.getColumns(), null));
+            Long assigneeId = card.getAssigneeId();
+            String nickName = null;
+            if (boardUserMap.containsKey(assigneeId) && assigneeId != null) {
+                 nickName = boardUserMap.get(assigneeId).getUser().getNickName();
             }
+            cardGetAllResponseDtoList.add(CardGetAllResponseDto.of(card, card.getColumns(), nickName));
 
         }
-
         return cardGetAllResponseDtoList;
+
     }
+    // 1. assigneeIds 를 가지고 보드유저 리스트를 가져오는 방법찾기
+    // 2. 카드리스트에서 각 assignee의 유저정보를 가져오려면 보드유저 리스트를 어떤 형태로 구현해야 추가 DB 조회없이 가져올 수 있을까?
+    // 3. 카드아답터.getAllCards 바꾸기 -> 페이징 처리하기
+
 
     /**
      * 담당자별 카드조회
      *
      * @param assigneeId
      * @return List<CardsGetByAssigneeId>
-     * @throws NotFoundCardListException 조회할 카드가 없을 때
+     * @throws NotFoundCardListException  조회할 카드가 없을 때
      * @throws NotFoundBoardUserException assigneeId가 있는데 보드유저를 찾을 수 없을 때
      */
     public List<CardsGetByAssigneeId> getCardsByAssigneeId(Long assigneeId) {
@@ -203,9 +203,10 @@ public class CardService {
 
     /**
      * 상태별 카드 조회
+     *
      * @param columnId
      * @return List<CardsGetByColumnId>
-     * @throws NotFoundCardListException 조회할 카드가 없을 때
+     * @throws NotFoundCardListException  조회할 카드가 없을 때
      * @throws NotFoundBoardUserException assigneeId가 있는데 보드유저를 찾을 수 없을 때
      * @throws NotFoundColumnException    columnId에 맞는 column이 없을 때
      */
@@ -233,7 +234,7 @@ public class CardService {
      *
      * @param cardId
      * @return String cardId + " 번 카드 삭제 완료 되었습니다.";
-     @throws NotFoundCardException 카드아이디로 카드를 찾을 수 없을 때
+     * @throws NotFoundCardException 카드아이디로 카드를 찾을 수 없을 때
      */
     @Transactional
     public String deleteCard(Long cardId) {
