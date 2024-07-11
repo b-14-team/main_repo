@@ -2,6 +2,7 @@ package com.wolf.workflow.user.adapter;
 
 import com.wolf.workflow.common.exception.DuplicatedEmailException;
 import com.wolf.workflow.common.exception.NotFoundUserException;
+import com.wolf.workflow.common.exception.StatusUserException;
 import com.wolf.workflow.common.util.MessageUtil;
 import com.wolf.workflow.user.entity.User;
 import com.wolf.workflow.user.entity.UserStatus;
@@ -42,12 +43,23 @@ public class UserAdapter {
                         MessageUtil.getMessage("not.found.user")));
     }
 
+    /**
+     * 이메일로 사용자 존재여부 조회
+     *
+     * @param email 체크할 이메일 주소
+     * @throws StatusUserException 이미 탈퇴한 사용자인 경우
+     */
     public User getUserByEmailAndStatus(String email) {
         User user = getUserByEmail(email);
         UserStatus.checkUserStatus(user.getUserStatus());
         return user;
     }
 
+    /**
+     * 이메일로 사용자 존재여부 조회
+     *
+     * @param email 체크할 이메일 주소
+     */
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundUserException(
