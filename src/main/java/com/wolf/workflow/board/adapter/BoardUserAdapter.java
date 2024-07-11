@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class BoardUserAdapter {
     private final BoardUserRepository boardUserRepository;
 
-    public BoardUser getBoardByUserById(Long id) {
+    public BoardUser getBoardUserById(Long id) {
        return boardUserRepository.findById(id).orElseThrow(()->
                new NotFoundBoardUserException(MessageUtil.getMessage("not.find.boardUser"))
        );

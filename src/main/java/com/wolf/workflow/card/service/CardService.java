@@ -51,7 +51,7 @@ public class CardService {
         // assigneeId가 있는 경우
         if (Objects.nonNull(requestDto.getAssigneeId())) {
             // assigneeId로 보드유저 찾아오기
-            BoardUser boardUser = boardUserAdapter.getBoardByUserById(requestDto.getAssigneeId());
+            BoardUser boardUser = boardUserAdapter.getBoardUserById(requestDto.getAssigneeId());
             //카드 생성후 저장
             Card card = Card.createCard(requestDto, columns);
             cardAdapter.createCard(card);
@@ -89,7 +89,7 @@ public class CardService {
         // assigneeId가 있는 경우
         if (Objects.nonNull(requestDto.getAssigneeId())) {
             // assigneeId로 보드유저 찾아오기
-            BoardUser boardUser = boardUserAdapter.getBoardByUserById(requestDto.getAssigneeId());
+            BoardUser boardUser = boardUserAdapter.getBoardUserById(requestDto.getAssigneeId());
             // 업데이트
             card.updateCard(requestDto.getTitle(), requestDto.getContent(), requestDto.getAssigneeId(), requestDto.getDeadDate());
             //ResponseDto 생성
@@ -121,7 +121,7 @@ public class CardService {
         // assigneeId가 있는 경우
         if (Objects.nonNull(card.getAssigneeId())) {
             // assigneeId로 보드유저 찾아오기
-            BoardUser boardUser = boardUserAdapter.getBoardByUserById(card.getAssigneeId());
+            BoardUser boardUser = boardUserAdapter.getBoardUserById(card.getAssigneeId());
 
             //ResponseDto 생성
             return CardGetResponseDto.of(card, card.getColumns(), boardUser.getUser().getNickName());
@@ -146,7 +146,7 @@ public class CardService {
         for (Card card : cards) {
             // assigneeId가 있는 카드의 경우
             if (Objects.nonNull(card.getAssigneeId())) {
-                BoardUser boardUser = boardUserAdapter.getBoardByUserById(card.getAssigneeId());
+                BoardUser boardUser = boardUserAdapter.getBoardUserById(card.getAssigneeId());
                 cardGetAllResponseDtoList.add(CardGetAllResponseDto.of(card, card.getColumns(), boardUser.getUser().getNickName()));
             } else {
                 // assigneeId가 없는 카드의 경우
@@ -174,7 +174,7 @@ public class CardService {
         for (Card card : cards) {
             // assigneeId가 있는 카드의 경우
             if (Objects.nonNull(card.getAssigneeId())) {
-                BoardUser boardUser = boardUserAdapter.getBoardByUserById(card.getAssigneeId());
+                BoardUser boardUser = boardUserAdapter.getBoardUserById(card.getAssigneeId());
                 cardsGetByAssigneeIdList.add(CardsGetByAssigneeId.of(card, card.getColumns(), boardUser.getUser().getNickName()));
             }
         }
@@ -198,7 +198,7 @@ public class CardService {
         for (Card card : cards) {
             // assigneeId가 있는 카드의 경우
             if (Objects.nonNull(card.getAssigneeId())) {
-                BoardUser boardUser = boardUserAdapter.getBoardByUserById(card.getAssigneeId());
+                BoardUser boardUser = boardUserAdapter.getBoardUserById(card.getAssigneeId());
                 cardsGetByColumnIdList.add(CardsGetByColumnId.of(card, card.getColumns(), boardUser.getUser().getNickName()));
             } else {
                 // assigneeId가 없는 카드의 경우
