@@ -6,6 +6,7 @@ import com.wolf.workflow.common.Timestamped;
 import jakarta.persistence.*;
 import java.util.LinkedList;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,4 +43,21 @@ public class Columns extends Timestamped {
     @OneToMany(mappedBy = "columns")
     private List<Card> cardList = new ArrayList<>();
 
+    @Builder
+    private Columns(String columnsStatus, String color) {
+        this.columnsStatus = columnsStatus;
+        this.color = color;
+    }
+
+    public static Columns createColumn(String columnsStatus, String color) {
+        return Columns.builder()
+            .columnsStatus(columnsStatus)
+            .color(color)
+            .build();
+    }
+
+    public void updateColumn(String columnsStatus, String color) {
+        this.columnsStatus = columnsStatus;
+        this.color = color;
+    }
 }
