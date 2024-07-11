@@ -4,8 +4,8 @@ import com.wolf.workflow.card.entity.Card;
 import com.wolf.workflow.card.repository.CardRepository;
 import com.wolf.workflow.common.exception.NotFoundCardException;
 import com.wolf.workflow.common.exception.NotFoundCardListException;
+import com.wolf.workflow.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,7 +16,6 @@ import java.util.Locale;
 public class CardAdapter {
 
     private final CardRepository cardRepository;
-    private final MessageSource messageSource;
 
     public void createCard(Card card) {
         cardRepository.save(card);
@@ -25,14 +24,14 @@ public class CardAdapter {
     public Card getCardById(Long cardId) {
 
         return cardRepository.findById(cardId).orElseThrow(() ->
-                new NotFoundCardException(messageSource.getMessage("not.find.card", null, Locale.getDefault()))
+                new NotFoundCardException(MessageUtil.getMessage("not.find.card"))
         );
     }
 
     public List<Card> getAllCards() {
         List<Card> cardList = cardRepository.findAll();
         if (cardList.isEmpty()) {
-            throw new NotFoundCardListException(messageSource.getMessage("not.find.cardList", null, Locale.getDefault()));
+            throw new NotFoundCardListException(MessageUtil.getMessage("not.find.cardList"));
         }
         return cardList;
     }
@@ -40,7 +39,7 @@ public class CardAdapter {
     public List<Card> getCardsByAssigneeId(Long assigneeId) {
         List<Card> cardList = cardRepository.findByAssigneeId(assigneeId);
         if (cardList.isEmpty()) {
-            throw new NotFoundCardListException(messageSource.getMessage("not.find.cardList", null, Locale.getDefault()));
+            throw new NotFoundCardListException(MessageUtil.getMessage("not.find.cardList"));
         }
         return cardList;
     }
@@ -48,7 +47,7 @@ public class CardAdapter {
     public List<Card> getCardsByColumnId(Long columnId) {
         List<Card> cardList = cardRepository.findByColumnsId(columnId);
         if (cardList.isEmpty()) {
-            throw new NotFoundCardListException(messageSource.getMessage("not.find.cardList", null, Locale.getDefault()));
+            throw new NotFoundCardListException(MessageUtil.getMessage("not.find.cardList"));
         }
         return cardList;
     }
