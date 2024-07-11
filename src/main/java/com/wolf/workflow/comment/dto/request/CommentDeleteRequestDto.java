@@ -1,10 +1,10 @@
 package com.wolf.workflow.comment.dto.request;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class CommentDeleteRequestDto {
-    private final Long userId;  // Security 전 임시 id
+    private Long userId;  // Security 전 임시 id
 }

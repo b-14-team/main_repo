@@ -2,6 +2,7 @@ package com.wolf.workflow.comment.controller;
 
 import com.wolf.workflow.comment.dto.request.CommentCreateRequestDto;
 import com.wolf.workflow.comment.dto.request.CommentDeleteRequestDto;
+import com.wolf.workflow.comment.dto.request.CommentGetRequestDto;
 import com.wolf.workflow.comment.dto.request.CommentUpdateRequestDto;
 import com.wolf.workflow.comment.dto.response.CommentCreateResponseDto;
 import com.wolf.workflow.comment.dto.response.CommentGetResponseDto;
@@ -9,6 +10,7 @@ import com.wolf.workflow.comment.dto.response.CommentUpdateResponseDto;
 import com.wolf.workflow.comment.service.CommentService;
 import com.wolf.workflow.common.globalresponse.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,8 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,16 +51,26 @@ public class CommentController {
 
     /**
      * 댓글 전체 조회
+     * 정렬: 작성일자 최신 순
+     * 주의 !! 로그인 하지 않은 사용자는 조회할 수 없습니다.
      *
      * @param cardId 댓글을 조회할 카드
      * @return 카드에 해당하는 모든 댓글 리스트
      */
     @ResponseBody
     @GetMapping("/{cardId}")
-    public ResponseEntity<ApiResponse<List<CommentGetResponseDto>>> getAllComment(
+    public ResponseEntity<ApiResponse<Page<CommentGetResponseDto>>> getAllComment(
+            @RequestBody CommentGetRequestDto requestDto,
             @PathVariable Long cardId
     ) {
-        List<CommentGetResponseDto> responseDtoList = commentService.getAllComments(cardId);
+
+        Page<CommentGetResponseDto> responseDtoList = commentService.getAllComments(
+                cardId,
+                requestDto.getPage(),
+                requestDto.getSize(),
+                requestDto.getSortBy(),
+                requestDto.isAsc()
+        );
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.of(responseDtoList));
