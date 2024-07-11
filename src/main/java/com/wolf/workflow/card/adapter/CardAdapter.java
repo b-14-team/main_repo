@@ -6,10 +6,11 @@ import com.wolf.workflow.common.exception.NotFoundCardException;
 import com.wolf.workflow.common.exception.NotFoundCardListException;
 import com.wolf.workflow.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Locale;
 
 @Component
 @RequiredArgsConstructor
@@ -28,12 +29,12 @@ public class CardAdapter {
         );
     }
 
-    public List<Card> getAllCards() {
-        List<Card> cardList = cardRepository.findAll();
+    public List<Card> getAllCards(Pageable pageable) {
+        Page<Card> cardList = cardRepository.findAll(pageable);
         if (cardList.isEmpty()) {
             throw new NotFoundCardListException(MessageUtil.getMessage("not.find.cardList"));
         }
-        return cardList;
+        return cardList.getContent();
     }
 
     public List<Card> getCardsByAssigneeId(Long assigneeId) {

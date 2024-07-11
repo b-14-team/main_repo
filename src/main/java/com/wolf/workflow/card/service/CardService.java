@@ -12,6 +12,8 @@ import com.wolf.workflow.column.entity.Columns;
 import com.wolf.workflow.common.exception.*;
 import com.wolf.workflow.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -138,10 +140,26 @@ public class CardService {
      * @throws NotFoundCardListException  조회할 카드가 없을 때
      * @throws NotFoundBoardUserException assigneeId가 있는데 보드유저를 찾을 수 없을 때
      */
-    public List<CardGetAllResponseDto> getAllCards() {
+    public List<CardGetAllResponseDto> getAllCards(int page, int size) {
 
-        List<Card> cards = cardAdapter.getAllCards();
+        //페이징 처리
+        Pageable pageable = PageRequest.of(page, size);
+        List<Card> cards = cardAdapter.getAllCards(pageable);
+
+
         List<CardGetAllResponseDto> cardGetAllResponseDtoList = new ArrayList<>();
+
+        //assigneeId 리스트 뽑아오기
+        List<Long> assigneeIds = cards.stream().map(Card::getAssigneeId).toList();
+
+        for (Long assigneeId : assigneeIds) {
+
+        }
+
+
+        // 1. assigneeIds 를 가지고 보드유저 리스트를 가져오는 방법찾기
+        // 2. 카드리스트에서 각 assignee의 유저정보를 가져오려면 보드유저 리스트를 어떤 형태로 구현해야 추가 DB 조회없이 가져올 수 있을까?
+        // 3. 카드아답터.getAllCards 바꾸기 -> 페이징 처리하기
 
         for (Card card : cards) {
             // assigneeId가 있는 카드의 경우
@@ -152,6 +170,7 @@ public class CardService {
                 // assigneeId가 없는 카드의 경우
                 cardGetAllResponseDtoList.add(CardGetAllResponseDto.of(card, card.getColumns(), null));
             }
+
         }
 
         return cardGetAllResponseDtoList;

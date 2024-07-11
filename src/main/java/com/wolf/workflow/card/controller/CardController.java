@@ -79,9 +79,11 @@ public class CardController {
      */
     @ResponseBody
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CardGetAllResponseDto>>> getAllCards() {
+    public ResponseEntity<ApiResponse<List<CardGetAllResponseDto>>> getAllCards(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        List<CardGetAllResponseDto> cardGetAllResponseDto = cardService.getAllCards();
+        List<CardGetAllResponseDto> cardGetAllResponseDto = cardService.getAllCards(page,size);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.of(cardGetAllResponseDto));
@@ -119,7 +121,6 @@ public class CardController {
     }
 
     /**
-     *
      * @param cardId
      * @return msg
      */

@@ -9,4 +9,5 @@ public interface CardRepository extends JpaRepository<Card,Long> {
     List<Card> findByAssigneeId(Long assigneeId);
 
     List<Card> findByColumnsId(Long columnId);
+
 }
