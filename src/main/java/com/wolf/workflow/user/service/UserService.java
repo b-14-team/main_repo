@@ -24,7 +24,7 @@ public class UserService {
 
     /**
      * 사용자를 생성합니다.
-     * <p>
+     *
      * 사용자 이메일의 중복을 체크하고, 중복이 없으면 새로운 사용자를 생성합니다.
      *
      * @param requestDto 회원가입 요청 데이터를 담고 있는 UserSignupRequestDto 객체. 필수 값입니다.

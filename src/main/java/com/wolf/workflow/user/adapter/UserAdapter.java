@@ -18,7 +18,7 @@ public class UserAdapter {
 
     /**
      * 이메일 중복을 체크합니다.
-     * <p>
+     *
      * 이메일이 이미 존재하면 에외를 던집니다.
      *
      * @param email 체크할 이메일 주소
@@ -34,7 +34,7 @@ public class UserAdapter {
 
     /**
      * 주어진 사용자 ID로 사용자를 검색합니다.
-     * <p>
+     *
      * 사용자를 찾을 수 없는 경우 예외를 던집니다.
      *
      * @param userId 검색할 사용자 ID. 필수 값입니다.

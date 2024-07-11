@@ -8,7 +8,6 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
-@Builder
 public class UserSignupRequestDto {
 
     @Email(regexp = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$",
