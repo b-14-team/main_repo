@@ -2,9 +2,9 @@ package com.wolf.workflow.common.exception;
 
 import com.wolf.workflow.common.exception.global.GlobalMismatchException;
 
-public class PasswordMismatchException extends GlobalMismatchException {
+public class MismatchPasswordException extends GlobalMismatchException {
 
-    public PasswordMismatchException(String message) {
+    public MismatchPasswordException(String message) {
         super(message);
     }
 }
