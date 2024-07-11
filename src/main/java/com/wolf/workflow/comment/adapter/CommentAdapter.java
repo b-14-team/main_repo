@@ -5,6 +5,8 @@ import com.wolf.workflow.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class CommentAdapter {
@@ -13,5 +15,9 @@ public class CommentAdapter {
 
     public void createComment(Comment comment) {
         commentRepository.save(comment);
+    }
+
+    public List<Comment> getAllCommentsByCardId(Long cardId) {
+        return commentRepository.findAllByCardId(cardId);
     }
 }

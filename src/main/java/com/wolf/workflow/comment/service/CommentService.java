@@ -5,6 +5,7 @@ import com.wolf.workflow.card.entity.Card;
 import com.wolf.workflow.comment.adapter.CommentAdapter;
 import com.wolf.workflow.comment.dto.request.CommentCreateRequestDto;
 import com.wolf.workflow.comment.dto.response.CommentCreateResponseDto;
+import com.wolf.workflow.comment.dto.response.CommentGetResponseDto;
 import com.wolf.workflow.comment.entity.Comment;
 import com.wolf.workflow.common.exception.NotFoundCardException;
 import com.wolf.workflow.common.exception.NotFoundUserException;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,7 +27,7 @@ public class CommentService {
     private final UserAdapter userAdapter;
 
     /**
-     * 댓글 생성하기
+     * 댓글 생성
      *
      * @param requestDto 생성하려는 댓글 내용
      * @param cardId 댓글을 달 카드
@@ -50,8 +50,19 @@ public class CommentService {
         return CommentCreateResponseDto.of(comment);
     }
 
-    public List<CommentCreateResponseDto> getAllComment() {
-        List<CommentCreateResponseDto> commentResponseDtoList = new ArrayList<>();
-        return commentResponseDtoList;
+    /**
+     * 전체 댓글 조회
+     *
+     * @param cardId 댓글 조회할 카드
+     * @throws NotFoundCardException 카드를 찾을 수 없음
+     */
+    public List<CommentGetResponseDto> getAllComments(Long cardId) {
+
+        // 카드 ID로 검색
+        Card card = cardAdapter.getCardById(cardId);
+
+        // 댓글 전체 조회
+        List<Comment> commentList = commentAdapter.getAllCommentsByCardId(cardId);
+        return commentList.stream().map(CommentGetResponseDto::new).toList();
     }
 }

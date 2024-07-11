@@ -2,6 +2,7 @@ package com.wolf.workflow.comment.controller;
 
 import com.wolf.workflow.comment.dto.request.CommentCreateRequestDto;
 import com.wolf.workflow.comment.dto.response.CommentCreateResponseDto;
+import com.wolf.workflow.comment.dto.response.CommentGetResponseDto;
 import com.wolf.workflow.comment.service.CommentService;
 import com.wolf.workflow.common.globalresponse.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class CommentController {
      * 댓글 등록
      *
      * @param requestDto 댓글을 등록할 내용을 담는 dto
+     * @return 댓글 id, 사용자 id, 카드 id, 댓글 내용, 작성 시간, 수정 시간
      */
     @ResponseBody
     @PostMapping("/{cardId}")
@@ -42,10 +44,17 @@ public class CommentController {
 
     }
 
-    @GetMapping("/")
-    public ResponseEntity<ApiResponse<List<CommentCreateResponseDto>>> getComments() {
-        List<CommentCreateResponseDto> responseDtoList = commentService.getAllComment();
-        return ResponseEntity.ok()
+    /**
+     * 댓글 전체 조회
+     *
+     * @return 카드에 해당하는 모든 댓글 리스트
+     */
+    @GetMapping("/{cardId}")
+    public ResponseEntity<ApiResponse<List<CommentGetResponseDto>>> getAllComment(
+            @PathVariable Long cardId
+    ) {
+        List<CommentGetResponseDto> responseDtoList = commentService.getAllComments(cardId);
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.of(responseDtoList));
     }
 }
