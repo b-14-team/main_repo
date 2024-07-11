@@ -9,14 +9,13 @@ import com.wolf.workflow.card.dto.response.*;
 import com.wolf.workflow.card.entity.Card;
 import com.wolf.workflow.column.adapter.ColumnAdapter;
 import com.wolf.workflow.column.entity.Columns;
-import com.wolf.workflow.common.exception.NotFoundBoardUserException;
-import com.wolf.workflow.common.exception.NotFoundCardException;
-import com.wolf.workflow.common.exception.NotFoundCardListException;
-import com.wolf.workflow.common.exception.NotFoundColumnException;
+import com.wolf.workflow.common.exception.*;
+import com.wolf.workflow.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +39,11 @@ public class CardService {
      */
 
     public CardCreateResponseDto createCard(CardCreateRequestDto requestDto, Long columnId) {
+
+        // requestDto 의 deadDate 가 현재시간보다 이전이면 예외 처리 해주기
+        if (Objects.nonNull(requestDto.getDeadDate())) {
+            checkDeadDate(requestDto.getDeadDate());
+        }
 
         // columId로 칼럼 찾아오기
         Columns columns = columnAdapter.findColumnsById(columnId);
@@ -73,6 +77,11 @@ public class CardService {
      */
     @Transactional
     public CardUpdateResponseDto updateCard(CardUpdateRequestDto requestDto, Long cardId) {
+
+        // requestDto 의 deadDate 가 현재시간보다 이전이면 예외 처리 해주기
+        if (Objects.nonNull(requestDto.getDeadDate())) {
+            checkDeadDate(requestDto.getDeadDate());
+        }
 
         // cardId로 카드 찾아오기
         Card card = cardAdapter.getCardById(cardId);
@@ -216,5 +225,11 @@ public class CardService {
         cardAdapter.deleteCard(card.getId());
 
         return cardId + " 번 카드 삭제 완료 되었습니다.";
+    }
+
+    private void checkDeadDate(LocalDateTime deadDate) {
+        if (deadDate.isBefore(LocalDateTime.now())) {
+            throw new InvalidDeadDateException(MessageUtil.getMessage("invalid.deadDate"));
+        }
     }
 }
