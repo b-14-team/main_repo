@@ -44,4 +44,12 @@ public class CardAdapter {
         }
         return cardList;
     }
+
+    public List<Card> getCardsByColumnId(Long columnId) {
+        List<Card> cardList = cardRepository.findByColumnId(columnId);
+        if (cardList.isEmpty()) {
+            throw new NotFoundCardListException(messageSource.getMessage("not.find.cardList", null, Locale.getDefault()));
+        }
+        return cardList;
+    }
 }

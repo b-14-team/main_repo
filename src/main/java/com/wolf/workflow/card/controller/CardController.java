@@ -78,7 +78,7 @@ public class CardController {
      * @return List<CardGetResponseDto>
      */
     @ResponseBody
-    @GetMapping("/cards")
+    @GetMapping
     public ResponseEntity<ApiResponse<List<CardGetAllResponseDto>>> getAllCards() {
 
         List<CardGetAllResponseDto> cardGetAllResponseDto = cardService.getAllCards();
@@ -89,15 +89,32 @@ public class CardController {
 
     /**
      * 담당자별 카드 조회
+     *
      * @param assigneeId
      * @return List<CardsGetByAssigneeId>
      */
     @ResponseBody
-    @GetMapping("/cards/{assigneeId}")
+    @GetMapping("/{assigneeId}")
     public ResponseEntity<ApiResponse<List<CardsGetByAssigneeId>>> getCardsByAssigneeId(@PathVariable Long assigneeId) {
 
         List<CardsGetByAssigneeId> cardsGetByAssigneeIdList = cardService.getCardsByAssigneeId(assigneeId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.of(cardsGetByAssigneeIdList));
+    }
+
+    /**
+     * 상태별 카드 조회
+     *
+     * @param columnId
+     * @return List<CardsGetByColumnId>
+     */
+    @ResponseBody
+    @GetMapping("/{columnId}")
+    public ResponseEntity<ApiResponse<List<CardsGetByColumnId>>> getCardsByColumId(@PathVariable Long columnId) {
+
+        List<CardsGetByColumnId> cardsGetByColumnIdList = cardService.getCardsByColumnId(columnId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.of(cardsGetByColumnIdList));
     }
 }

@@ -172,4 +172,31 @@ public class CardService {
 
         return cardsGetByAssigneeIdList;
     }
+
+    /**
+     * 상태별 카드 조회
+     * @param columnId
+     * @return List<CardsGetByColumnId>
+     * @throws NotFoundCardListException 조회할 카드가 없을 때
+     * @throws NotFoundBoardUserException assigneeId가 있는데 보드유저를 찾을 수 없을 때
+     * @throws NotFoundColumnException    columnId에 맞는 column이 없을 때
+     */
+    public List<CardsGetByColumnId> getCardsByColumnId(Long columnId) {
+
+        List<Card> cards = cardAdapter.getCardsByColumnId(columnId);
+        List<CardsGetByColumnId> cardsGetByColumnIdList = new ArrayList<>();
+
+        for (Card card : cards) {
+            // assigneeId가 있는 카드의 경우
+            if (Objects.nonNull(card.getAssigneeId())) {
+                BoardUser boardUser = boardUserAdapter.getBoardByUserById(card.getAssigneeId());
+                cardsGetByColumnIdList.add(CardsGetByColumnId.of(card, card.getColumns(), boardUser.getUser().getNickName()));
+            } else {
+                // assigneeId가 없는 카드의 경우
+                cardsGetByColumnIdList.add(CardsGetByColumnId.of(card, card.getColumns(), null));
+            }
+        }
+
+        return cardsGetByColumnIdList;
+    }
 }
