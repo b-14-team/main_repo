@@ -7,17 +7,17 @@ import lombok.Getter;
 @Getter
 public class ApiResponse<T> {
 
-    private final int httpCode; // 200
-    private final String httpCodeName;  // "OK"
+    private final int statusCode; // 200
+    private final String reasonPhrase;  // "OK"
     private final String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final T data;
 
     @Builder
-    protected ApiResponse(int httpCode,  String httpCodeName,String message, T data) {
-        this.httpCode = httpCode;
-        this.httpCodeName = httpCodeName;
+    protected ApiResponse(int statusCode, String reasonPhrase, String message, T data) {
+        this.statusCode = statusCode;
+        this.reasonPhrase = reasonPhrase;
         this.message = message;
         this.data = data;
     }
