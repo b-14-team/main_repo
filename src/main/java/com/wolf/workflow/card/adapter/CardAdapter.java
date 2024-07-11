@@ -26,4 +26,14 @@ public class CardAdapter {
             new NotFoundCardException(messageSource.getMessage("not.find.card",null, Locale.getDefault()))
                 );
     }
+
+    public void existsById(Long cardId) {
+        if (!cardRepository.existsById(cardId)) {
+            throw new NotFoundCardException(
+                    messageSource.getMessage(
+                            "not.find.card",
+                            null,
+                            Locale.getDefault()));
+        }
+    }
 }

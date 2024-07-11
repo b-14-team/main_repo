@@ -2,6 +2,7 @@ package com.wolf.workflow.comment.entity;
 
 import com.wolf.workflow.card.entity.Card;
 import com.wolf.workflow.comment.dto.request.CommentCreateRequestDto;
+import com.wolf.workflow.comment.dto.request.CommentUpdateRequestDto;
 import com.wolf.workflow.common.Timestamped;
 import com.wolf.workflow.user.entity.User;
 import jakarta.persistence.*;
@@ -32,7 +33,7 @@ public class Comment extends Timestamped {
     private User user;
 
     @Builder
-    public Comment(Card card, User user, String content) {
+    private Comment(Card card, User user, String content) {
         this.card = card;
         this.user = user;
         this.content = content;
@@ -44,5 +45,9 @@ public class Comment extends Timestamped {
                 .card(card)
                 .user(user)
                 .build();
+    }
+
+    public void updateComment(CommentUpdateRequestDto requestDto) {
+        this.content = requestDto.getContent();
     }
 }

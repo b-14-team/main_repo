@@ -51,4 +51,20 @@ public class UserAdapter {
     public void createUser(User user) {
         userRepository.save(user);
     }
+
+    /**
+     * 사용자 ID로 사용자가 존재하는지 확인합니다.
+     *
+     * @param userId 검색할 사용자 ID
+     * @throws NotFoundUserException 사용자를 찾을 수 없는 경우 발생하는 예외
+     */
+    public void existsById(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundUserException((
+                    messageSource.getMessage(
+                            "not.found.user",
+                            null,
+                            Locale.getDefault())));
+        }
+    }
 }
