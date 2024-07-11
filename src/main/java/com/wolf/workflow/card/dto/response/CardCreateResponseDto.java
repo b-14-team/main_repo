@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @AllArgsConstructor
-public class CardResponseDto {
+public class CardCreateResponseDto {
     private Long id;
     private String title;
     private String content;
@@ -22,8 +22,8 @@ public class CardResponseDto {
     private LocalDateTime createdAt;
 
 
-    public static CardResponseDto of(Card card, Columns columns, String assignee) {
-        return CardResponseDto.builder()
+    public static CardCreateResponseDto of(Card card, Columns columns, String assignee) {
+        return CardCreateResponseDto.builder()
                 .id(card.getId())
                 .title(card.getTitle())
                 .content(card.getContent())
