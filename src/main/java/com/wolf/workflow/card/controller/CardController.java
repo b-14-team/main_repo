@@ -109,7 +109,7 @@ public class CardController {
      * @return List<CardsGetByColumnId>
      */
     @ResponseBody
-    @GetMapping("/column/{columnId}")
+    @GetMapping("/columns/{columnId}")
     public ResponseEntity<ApiResponse<List<CardsGetByColumnId>>> getCardsByColumId(@PathVariable Long columnId) {
 
         List<CardsGetByColumnId> cardsGetByColumnIdList = cardService.getCardsByColumnId(columnId);
@@ -117,4 +117,20 @@ public class CardController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.of(cardsGetByColumnIdList));
     }
+
+    /**
+     *
+     * @param cardId
+     * @return msg
+     */
+    @ResponseBody
+    @DeleteMapping("/{cardId}")
+    public ResponseEntity<ApiResponse<String>> deleteCard(@PathVariable Long cardId) {
+        String msg = cardService.deleteCard(cardId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.of(msg));
+
+    }
+
 }

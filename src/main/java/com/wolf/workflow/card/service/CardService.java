@@ -35,7 +35,7 @@ public class CardService {
      * @param requestDto
      * @param columnId
      * @return cardResponseDto
-     * @throws NotFoundColumnException    columnId에 맞는 column이 없을 때
+     * @throws NotFoundColumnException columnId에 맞는 column이 없을 때
      * @throws NotFoundBoardUserException assigneeId 에 맞는 보드유저가 없을 때
      */
 
@@ -68,7 +68,7 @@ public class CardService {
      * @param requestDto
      * @param cardId
      * @return CardUpdateResponseDto
-     * @throws NotFoundCardException      카드아이디로 카드를 찾을 수 없을 때
+     * @throws NotFoundCardException 카드아이디로 카드를 찾을 수 없을 때
      * @throws NotFoundBoardUserException RequestDto에 assigneeId가 있는데 보드유저를 찾을 수 없을 때
      */
     @Transactional
@@ -100,7 +100,7 @@ public class CardService {
      *
      * @param cardId
      * @return CardGetResponseDto
-     * @throws NotFoundCardException      카드아이디로 카드를 찾을 수 없을 때
+     * @throws NotFoundCardException 카드아이디로 카드를 찾을 수 없을 때
      * @throws NotFoundBoardUserException assigneeId가 있는데 보드유저를 찾을 수 없을 때
      */
 
@@ -198,5 +198,23 @@ public class CardService {
         }
 
         return cardsGetByColumnIdList;
+    }
+
+    /**
+     * 카드 삭제하기
+     *
+     * @param cardId
+     * @return String cardId + " 번 카드 삭제 완료 되었습니다.";
+     @throws NotFoundCardException 카드아이디로 카드를 찾을 수 없을 때
+     */
+    @Transactional
+    public String deleteCard(Long cardId) {
+
+        // cardId로 카드 찾아오기
+        Card card = cardAdapter.getCardById(cardId);
+        // 삭제 하기
+        cardAdapter.deleteCard(card.getId());
+
+        return cardId + " 번 카드 삭제 완료 되었습니다.";
     }
 }

@@ -52,4 +52,8 @@ public class CardAdapter {
         }
         return cardList;
     }
+
+    public void deleteCard(Long id) {
+        cardRepository.deleteById(id);
+    }
 }
