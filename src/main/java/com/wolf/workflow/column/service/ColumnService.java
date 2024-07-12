@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -55,5 +57,9 @@ public class ColumnService {
   public void deleteColumn(Long columnId) {
     Columns columns = columnAdapter.findColumnsById(columnId);
     columnAdapter.deleteColumn(columns);
+  }
+
+  public List<Columns> getAllColumns() {
+    return columnAdapter.findAll();
   }
 }

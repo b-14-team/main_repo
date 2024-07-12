@@ -8,6 +8,7 @@ import com.wolf.workflow.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Locale;
 
 @Component
@@ -32,4 +33,7 @@ public class ColumnAdapter {
         columnRepository.delete(columns);
     }
 
+    public List<Columns> findAll() {
+        return columnRepository.findAll();
+    }
 }

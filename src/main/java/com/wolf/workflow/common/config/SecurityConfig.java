@@ -11,6 +11,7 @@ import com.wolf.workflow.common.security.jwt.JwtLogoutSuccessHandler;
 import com.wolf.workflow.common.security.jwt.JwtUtil;
 import com.wolf.workflow.user.adapter.UserAdapter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -53,6 +55,8 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
@@ -99,9 +103,13 @@ public class SecurityConfig {
         );
 
         http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
+                .requestMatchers("/favicon.ico").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/signup").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/reissue").permitAll()
-                .requestMatchers("/cards/*").permitAll()
+                .requestMatchers("/cards/**").permitAll()
+                .requestMatchers("/columns/**").permitAll()
+                .requestMatchers("/").permitAll()
                 .anyRequest().authenticated()
         );
 

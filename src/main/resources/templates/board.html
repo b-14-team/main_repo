@@ -2,11 +2,19 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>칸반보드</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"> </script>
+    <script src="/js/board.js" defer></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <title>WORK FLOW</title>
 </head>
 <body>
 <div class="header">
@@ -17,21 +25,7 @@
     </div>
 </div>
 <div class="board" id="board">
-    <div class="column" id="column1">
-        <div class="column-header">시작전</div>
-    </div>
-    <div class="column" id="column2">
-        <div class="column-header">진행중</div>
-    </div>
-    <div class="column" id="column3">
-        <div class="column-header">완료</div>
-    </div>
-    <div class="column" id="column4">
-        <div class="column-header">긴급</div>
-        <div class="card">할 일 1</div>
-        <div class="card">할 일 2</div>
-        <button class="add-button" onclick="showModal()">할 일 추가하기</button>
-    </div>
+    <!-- 칼럼이 동적으로 추가될 위치 -->
 </div>
 
 <div class="modal" id="modal">
@@ -42,9 +36,9 @@
             <input type="text" id="taskTitle" required>
             <label for="taskStatus">카드 상태</label>
             <select id="taskStatus">
-                <option value="시작전">시작전</option>
-                <option value="진행중">진행중</option>
-                <option value="완료">완료</option>
+                <option value="1">시작전</option>
+                <option value="2">진행중</option>
+                <option value="3">완료</option>
                 <option value="긴급">긴급</option>
             </select>
             <label for="taskContent">내용</label>
@@ -65,32 +59,16 @@
     </div>
 </div>
 
+</body>
+</html>
+
 <script>
-    const columnIdMap = {
-        "시작전": 1,
-        "진행중": 2,
-        "완료": 3,
-        "긴급": 4
-    };
-
-    // 각 칼럼을 드래그 가능하게 만듭니다.
-    var columns = document.querySelectorAll('.column');
-    columns.forEach(column => {
-        new Sortable(column, {
-            group: 'shared',
-            animation: 150
-        });
-    });
-
-    // 보드를 드래그 가능하게 만듭니다.
-    new Sortable(document.getElementById('board'), {
-        animation: 150,
-        draggable: '.column'
-    });
+    var columnIdForFind;
 
     // 모달 열기
-    function showModal() {
+    function showModal(columnId) {
         document.getElementById('modal').style.display = 'flex';
+        columnIdForFind = columnId;
     }
 
     // 모달 닫기
@@ -98,7 +76,7 @@
         document.getElementById('modal').style.display = 'none';
     }
 
-    // 할 일 추가 기능
+    // 할 일 추가
     function addTask() {
         var title = document.getElementById('taskTitle').value;
         var status = document.getElementById('taskStatus').value;
@@ -120,19 +98,19 @@
             status: status
         };
 
-        console.log("Created task:", task);  // task 로그
+        console.log("Created task:", task);
 
         // cardDto 객체 생성
         var cardDto = {
-            title: title,  // 카드 제목 (할 일의 제목과 동일하게 설정)
+            title: title,
             content: content,
             deadDate: dueDate ? new Date(dueDate).toISOString() : null,
             assigneeId: assignee ? parseInt(assignee) : null,
             status: status,
-            tasks: [task]  // 할 일 목록 포함
+            tasks: [task]
         };
 
-        console.log("Created cardDto with task:", cardDto);  // cardDto 로그
+        console.log("Created cardDto with task:", cardDto);
 
         addCard(cardDto);
         closeModal();
@@ -140,67 +118,24 @@
 
     // 카드 추가 기능 (백엔드와 통신)
     function addCard(cardDto) {
-        console.log("Sending cardDto:", cardDto);  // 디버깅을 위한 로그 추가
-
-        // 상태에 맞는 칼럼 ID를 가져옵니다.
-        var columnId = columnIdMap[cardDto.status];
+        console.log("Sending cardDto:", cardDto);
 
         $.ajax({
             type: 'POST',
-            url: `http://localhost:8080/cards/${columnId}`,  // URL에 칼럼 ID를 포함
+            url: `http://localhost:8080/cards/${columnIdForFind}`,
             crossOrigin: true,
             contentType: 'application/json',
             data: JSON.stringify(cardDto),
             success: function (response) {
                 alert("생성 완료");
-                addCardToColumn(response);
-                return;  // 백엔드 응답을 이용해 카드 추가
+                addCardToColumn(response); // 응답 받은 카드로 칼럼에 추가
             },
-            error: function (error, status, request) {
-                console.error("Error:", error);  // 오류 로그 추가
+            error: function (error) {
+                console.error("Error:", error);
                 alert("다시 입력해 주세요");
             },
         });
     }
 
-    // 카드 추가 칼럼 선택 기능
-    function addCardToColumn(card) {
-        var column;
-        if (card.status === "시작전") {
-            column = document.getElementById('column1');
-        } else if (card.status === "진행중") {
-            column = document.getElementById('column2');
-        } else if (card.status === "완료") {
-            column = document.getElementById('column3');
-        } else if (card.status === "긴급") {
-            column = document.getElementById('column4');
-        }
-        if (column) {
-            var newCard = document.createElement('div');
-            newCard.className = 'card';
-            newCard.textContent = card.title;
-            column.insertBefore(newCard, column.lastElementChild);
-        }
-    }
 
-    // 칼럼 추가 기능
-    function addColumn() {
-        var board = document.getElementById('board');
-        var newColumn = document.createElement('div');
-        newColumn.className = 'column';
-        newColumn.innerHTML = '<div class="column-header">새 칼럼</div>' +
-            '<button class="add-button" onclick="showModal()">할 일 추가하기</button>';
-        board.appendChild(newColumn);
-        new Sortable(newColumn, {
-            group: 'shared',
-            animation: 150
-        });
-        new Sortable(board, {
-            animation: 150,
-            draggable: '.column'
-        });
-
-    }
 </script>
-</body>
-</html>
