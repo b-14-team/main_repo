@@ -4,8 +4,8 @@ import com.wolf.workflow.column.entity.Columns;
 import com.wolf.workflow.column.repository.ColumnRepository;
 import com.wolf.workflow.common.exception.DuplicatedColumnException;
 import com.wolf.workflow.common.exception.NotFoundColumnException;
+import com.wolf.workflow.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
@@ -14,19 +14,18 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class ColumnAdapter {
 
-    private final MessageSource messageSource;
     private final ColumnRepository columnRepository;
 
     public Columns createColumn(Columns columns) {
-        if (columnRepository.existsByColumnsStatus(columns.getColumnsStatus())) {
-            throw new DuplicatedColumnException(messageSource.getMessage("already.exist.column", null, Locale.getDefault()));
+        if (columnRepository. isExistsByColumnsStatus(columns.getColumnsStatus())) {
+            throw new DuplicatedColumnException(MessageUtil.getMessage("already.exist.column"));
         }
         return columnRepository.save(columns);
     }
 
     public Columns findColumnsById(Long columnId) {
         return columnRepository.findById(columnId)
-            .orElseThrow(() -> new NotFoundColumnException(messageSource.getMessage("not.find.column", null, Locale.getDefault())));
+            .orElseThrow(() -> new NotFoundColumnException(MessageUtil.getMessage("already.exist.column")));
     }
 
     public void deleteColumn(Columns columns) {
