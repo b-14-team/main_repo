@@ -17,7 +17,7 @@ public class ColumnAdapter {
     private final ColumnRepository columnRepository;
 
     public Columns createColumn(Columns columns) {
-        if (columnRepository. isExistsByColumnsStatus(columns.getColumnsStatus())) {
+        if (columnRepository. existsByColumnsStatus(columns.getColumnsStatus())) {
             throw new DuplicatedColumnException(MessageUtil.getMessage("already.exist.column"));
         }
         return columnRepository.save(columns);

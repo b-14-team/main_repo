@@ -1,7 +1,6 @@
 package com.wolf.workflow.card.entity;
 
-import com.wolf.workflow.card.dto.request.CardRequestDto;
-import com.wolf.workflow.card.dto.request.CardUpdateRequestDto;
+import com.wolf.workflow.card.dto.request.CardCreateRequestDto;
 import com.wolf.workflow.column.entity.Columns;
 import com.wolf.workflow.common.Timestamped;
 import jakarta.persistence.*;
@@ -9,11 +8,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.thymeleaf.util.StringUtils;
-
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -55,7 +51,7 @@ public class Card extends Timestamped {
         this.deadDate = deadDate;
     }
 
-    public static Card createCard(CardRequestDto requestDto, Columns columns) {
+    public static Card createCard(CardCreateRequestDto requestDto, Columns columns) {
         return Card.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())

@@ -30,7 +30,7 @@ public class BoardService {
   private final BoardAdapter boardAdapter;
   private final BoardUserAdapter boardUserAdapter;
   private final UserAdapter userAdapter;
-  private final BoardRepository boardRepository;
+
 
 
   /**
