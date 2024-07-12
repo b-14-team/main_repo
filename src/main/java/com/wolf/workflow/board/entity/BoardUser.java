@@ -31,6 +31,10 @@ public class BoardUser {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Participation participation;
@@ -39,4 +43,19 @@ public class BoardUser {
     @Column(nullable = false)
     private BoardUserRole boardUserRole;
 
+    @Enumerated(EnumType.STRING)
+    private InvitationStatus invitationStatus;
+
+    public BoardUser(Board board, User user, Participation participation,
+        BoardUserRole boardUserRole) {
+        this.board = board;
+        this.user = user;
+        this.participation = participation;
+        this.boardUserRole = boardUserRole;
+    }
+
+    public void updateInvitationStatus(boolean approve) {
+        this.invitationStatus = approve ? InvitationStatus.ACCEPTED : InvitationStatus.DECLINED;
+    }
 }
+

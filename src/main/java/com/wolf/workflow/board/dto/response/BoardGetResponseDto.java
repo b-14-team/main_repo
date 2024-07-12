@@ -9,20 +9,21 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class BoardResponseDto {
-  private  Long boardId;
-  private  String board_name;
-  private  String content;
-  private LocalDateTime createAt;
+public class BoardGetResponseDto {
+    private Long boardId;
+    private String board_name;
+    private String content;
+    private LocalDateTime createAt;
 
 
-  public static BoardResponseDto of(Board board) {
-    return BoardResponseDto.builder()
+  public static BoardGetResponseDto of(Board board) {
+    return BoardGetResponseDto.builder()
         .boardId(board.getId())
         .board_name(board.getBoard_name())
         .content(board.getContent())
         .createAt(board.getCreatedAt())
         .build();
+
 
 
   }
