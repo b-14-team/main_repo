@@ -16,16 +16,15 @@ public class ColumnController {
 
   private final ColumnService columnService;
 
-  @Valid
+
   @PostMapping
-  public ResponseEntity<Void> createColumn(@RequestBody ColumnRequestDto requestDto) {
+  public ResponseEntity<Void> createColumn(@Valid @RequestBody ColumnRequestDto requestDto) {
     columnService.createColumn(requestDto);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  @Valid
   @PutMapping("/{columnId}")
-  public ResponseEntity<Void> updateColumn(@PathVariable Long columnId, @RequestBody ColumnRequestDto requestDto) {
+  public ResponseEntity<Void> updateColumn(@PathVariable Long columnId, @Valid @RequestBody ColumnRequestDto requestDto) {
     columnService.updateColumn(columnId, requestDto);
     return ResponseEntity.ok().build();
   }
