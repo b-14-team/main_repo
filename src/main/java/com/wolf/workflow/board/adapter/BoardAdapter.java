@@ -1,8 +1,12 @@
 package com.wolf.workflow.board.adapter;
 
+import com.wolf.workflow.board.entity.Board;
 import com.wolf.workflow.board.repository.BoardRepository;
-import lombok.NoArgsConstructor;
+import com.wolf.workflow.common.exception.NotFoundCardException;
+import com.wolf.workflow.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,4 +14,20 @@ import org.springframework.stereotype.Component;
 public class BoardAdapter {
 
     private final BoardRepository boardRepository;
+
+
+    public void createBoard(Board board) {
+        boardRepository.save(board);
+    }
+
+    public Board getBoardById(Long boardId) {
+        return boardRepository.findById(boardId).orElseThrow(() ->
+            new NotFoundCardException(MessageUtil.getMessage("not.find.board")));
+    }
+    public void deleteBoard(Long boardId) {
+        boardRepository.deleteById(boardId);
+    }
+    public Page<Board> getAllBoards(Pageable pageable) {
+        return boardRepository.findAll(pageable);
+    }
 }
