@@ -56,4 +56,11 @@ public class CardAdapter {
     public void deleteCard(Long id) {
         cardRepository.deleteById(id);
     }
+
+    public void existsById(Long cardId) {
+        if (!cardRepository.existsById(cardId)) {
+            throw new NotFoundCardException(MessageUtil.getMessage("not.find.card")
+            );
+        }
+    }
 }
