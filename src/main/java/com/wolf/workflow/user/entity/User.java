@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.util.Assert;
 
 @Entity
 @Getter
@@ -55,7 +56,7 @@ public class User extends Timestamped {
     @Builder
     public User(String email, String password, String nickName, String description,
             String refreshToken, List<Comment> commentList, List<BoardUser> boardUserList,
-            UserRole userRole, UserStatus userStatus) {
+            UserStatus userStatus, UserRole userRole) {
         this.email = email;
         this.password = password;
         this.nickName = nickName;
@@ -63,8 +64,8 @@ public class User extends Timestamped {
         this.refreshToken = refreshToken;
         this.commentList = commentList;
         this.boardUserList = boardUserList;
-        this.userRole = userRole;
         this.userStatus = userStatus;
+        this.userRole = userRole;
     }
 
     public static User createUser(UserSignupRequestDto requestDto) {
@@ -74,6 +75,7 @@ public class User extends Timestamped {
                 .nickName(requestDto.getNickName())
                 .description(requestDto.getDescription())
                 .userStatus(UserStatus.ENABLE)
+                .userRole(UserRole.USER)
                 .build();
     }
 
