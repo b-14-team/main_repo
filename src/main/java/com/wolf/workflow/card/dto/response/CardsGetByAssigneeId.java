@@ -7,11 +7,10 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-
 @Getter
 @Builder
 @AllArgsConstructor
-public class CardResponseDto {
+public class CardsGetByAssigneeId {
     private Long id;
     private String title;
     private String content;
@@ -22,8 +21,8 @@ public class CardResponseDto {
     private LocalDateTime createdAt;
 
 
-    public static CardResponseDto of(Card card, Columns columns, String assignee) {
-        return CardResponseDto.builder()
+    public static CardsGetByAssigneeId of(Card card, Columns columns, String assignee) {
+        return CardsGetByAssigneeId.builder()
                 .id(card.getId())
                 .title(card.getTitle())
                 .content(card.getContent())
