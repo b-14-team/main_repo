@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -262,8 +262,8 @@ public class CardService {
         return cardId + " 번 카드 삭제 완료 되었습니다.";
     }
 
-    private void checkDeadDate(LocalDateTime deadDate) {
-        if (deadDate.isBefore(LocalDateTime.now())) {
+    private void checkDeadDate(LocalDate deadDate) {
+        if (deadDate.isBefore(LocalDate.now())) {
             throw new InvalidDeadDateException(MessageUtil.getMessage("invalid.deadDate"));
         }
     }

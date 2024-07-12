@@ -74,6 +74,7 @@ public class User extends Timestamped {
                 .nickName(requestDto.getNickName())
                 .description(requestDto.getDescription())
                 .userStatus(UserStatus.ENABLE)
+                .userRole(UserRole.USER)
                 .build();
     }
 

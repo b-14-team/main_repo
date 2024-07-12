@@ -101,6 +101,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers(HttpMethod.POST, "/users/signup").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/reissue").permitAll()
+                .requestMatchers("/cards/*").permitAll()
                 .anyRequest().authenticated()
         );
 
