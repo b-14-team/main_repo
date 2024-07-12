@@ -1,7 +1,6 @@
 package com.wolf.workflow;
 
-import com.wolf.workflow.board.entity.Board;
-import com.wolf.workflow.board.entity.BoardUser;
+import com.wolf.workflow.board.entity.*;
 import com.wolf.workflow.column.entity.Columns;
 import com.wolf.workflow.user.entity.User;
 import com.wolf.workflow.user.entity.UserRole;
@@ -24,7 +23,6 @@ public class TestDB {
     @PostConstruct
     public void init() {
         initService.dbInit1();
-        initService.dbInit2();
         initService.dbInit3();
         initService.dbInit4();
         initService.dbInit5();
@@ -53,15 +51,23 @@ public class TestDB {
                     .userRole(UserRole.USER)
                     .build();
             save(consumer);
-        }
 
-        public void dbInit2() {
             Board board = Board.builder()
                     .board_name("테스트용 보드")
                     .content("테스트용 보드입니다")
                     .build();
             save(board);
+
+            BoardUser boardUser = BoardUser.builder()
+                    .board(board)
+                    .user(consumer)
+                    .boardUserRole(BoardUserRole.GENERAL_MANAGER)
+                    .invitationStatus(InvitationStatus.ACCEPTED)
+                    .participation(Participation.ENABLE)
+                    .build();
+            save(boardUser);
         }
+
 
         public void dbInit3() {
             Columns columns = Columns.builder()
@@ -69,6 +75,8 @@ public class TestDB {
                     .color("초록")
                     .build();
             save(columns);
+
+
         }
 
         public void dbInit4() {
@@ -86,7 +94,6 @@ public class TestDB {
                     .build();
             save(columns);
         }
-
 
         public void save(Object... objects) {
             for (Object object : objects) {
