@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -46,16 +47,29 @@ public class BoardUser {
     @Enumerated(EnumType.STRING)
     private InvitationStatus invitationStatus;
 
-    public BoardUser(Board board, User user, Participation participation,
-        BoardUserRole boardUserRole) {
+    @Builder
+    private BoardUser(Board board, User user, Participation participation,
+        BoardUserRole boardUserRole, InvitationStatus invitationStatus) {
         this.board = board;
         this.user = user;
         this.participation = participation;
         this.boardUserRole = boardUserRole;
+        this.invitationStatus = invitationStatus;
+    }
+    public static BoardUser createBoardUser(Board board, User user, Participation participation,
+        BoardUserRole boardUserRole, InvitationStatus invitationStatus) {
+        return BoardUser.builder()
+            .board(board)
+            .user(user)
+            .participation(participation)
+            .boardUserRole(boardUserRole)
+            .invitationStatus(invitationStatus)
+            .build();
     }
 
     public void updateInvitationStatus(boolean approve) {
         this.invitationStatus = approve ? InvitationStatus.ACCEPTED : InvitationStatus.DECLINED;
     }
+
 }
 

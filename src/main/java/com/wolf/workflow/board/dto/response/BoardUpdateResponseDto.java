@@ -14,8 +14,8 @@ public class BoardUpdateResponseDto {
   private  String content;
 
 
-  public static BoardResponseDto of(Board board) {
-    return BoardResponseDto.builder()
+  public static BoardUpdateResponseDto of(Board board) {
+    return BoardUpdateResponseDto.builder()
         .boardId(board.getId())
         .board_name(board.getBoard_name())
         .content(board.getContent())

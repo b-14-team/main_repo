@@ -31,7 +31,7 @@ public class BoardUserAdapter {
   public void BoardUserExists(Long boardId, Long userId) {
     BoardUser existsBoardUser = getBoardUser(boardId, userId);
     if (existsBoardUser != null && existsBoardUser.getParticipation() == Participation.ENABLE) {
-      throw new AlreadyInviteException("해당 사용자는 이미 보드에 초대되었습니다.");
+      throw new AlreadyInviteException(MessageUtil.getMessage("already.invited"));
     }
   }
 

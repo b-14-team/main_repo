@@ -3,7 +3,9 @@ package com.wolf.workflow.board.controller;
 import com.wolf.workflow.board.adapter.BoardUserAdapter;
 import com.wolf.workflow.board.dto.request.BoardRequestDto;
 import com.wolf.workflow.board.dto.request.BoardUpdateRequestDto;
+import com.wolf.workflow.board.dto.response.BoardGetResponseDto;
 import com.wolf.workflow.board.dto.response.BoardResponseDto;
+import com.wolf.workflow.board.dto.response.BoardUpdateResponseDto;
 import com.wolf.workflow.board.service.BoardService;
 import com.wolf.workflow.common.globalresponse.ApiResponse;
 import com.wolf.workflow.common.util.MessageUtil;
@@ -57,15 +59,15 @@ public class BoardController {
    */
   @ResponseBody
   @PatchMapping("/{boardId}")
-  public ResponseEntity<ApiResponse<BoardResponseDto>> updateBoard(
+  public ResponseEntity<ApiResponse<BoardUpdateResponseDto>> updateBoard(
       @PathVariable Long boardId,
       @Valid @RequestBody BoardUpdateRequestDto requestDto) {
-    BoardResponseDto boardResponseDto = boardService.updateBoard(
+    BoardUpdateResponseDto responseDto = boardService.updateBoard(
         requestDto,
         boardId,
         requestDto.getUserId());
     return ResponseEntity.status(HttpStatus.OK)
-        .body(ApiResponse.of(boardResponseDto));
+        .body(ApiResponse.of(responseDto));
   }
 
   /**
@@ -90,10 +92,10 @@ public class BoardController {
    */
   @ResponseBody
   @GetMapping("/{boardId}")
-  public ResponseEntity<ApiResponse<BoardResponseDto>> getBoardById(@PathVariable Long boardId) {
-    BoardResponseDto boardResponseDto = boardService.getBoardById(boardId);
+  public ResponseEntity<ApiResponse<BoardGetResponseDto>> getBoardById(@PathVariable Long boardId) {
+    BoardGetResponseDto responseDto = boardService.getBoardById(boardId);
     return ResponseEntity.status(HttpStatus.OK)
-        .body(ApiResponse.of(boardResponseDto));
+        .body(ApiResponse.of(responseDto));
   }
 
   /**
@@ -107,12 +109,12 @@ public class BoardController {
    */
   @ResponseBody
   @GetMapping
-  public ResponseEntity<ApiResponse<Page<BoardResponseDto>>> getAllBoards(
+  public ResponseEntity<ApiResponse<Page<BoardGetResponseDto>>> getAllBoards(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam( defaultValue = "10") int size,
       @RequestParam( defaultValue = "id") String sortBy,
       @RequestParam( defaultValue = "true") boolean isAsc) {
-    Page<BoardResponseDto> boardPage = boardService.getAllBoards(page, size, sortBy, isAsc);
+    Page<BoardGetResponseDto> boardPage = boardService.getAllBoards(page, size, sortBy, isAsc);
     return ResponseEntity.status(HttpStatus.OK)
         .body(ApiResponse.of(boardPage));
 

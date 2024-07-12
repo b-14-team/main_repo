@@ -4,13 +4,14 @@ import com.wolf.workflow.board.adapter.BoardAdapter;
 import com.wolf.workflow.board.adapter.BoardUserAdapter;
 import com.wolf.workflow.board.dto.request.BoardRequestDto;
 import com.wolf.workflow.board.dto.request.BoardUpdateRequestDto;
+import com.wolf.workflow.board.dto.response.BoardGetResponseDto;
 import com.wolf.workflow.board.dto.response.BoardResponseDto;
 import com.wolf.workflow.board.dto.response.BoardUpdateResponseDto;
 import com.wolf.workflow.board.entity.Board;
 import com.wolf.workflow.board.entity.BoardUser;
 import com.wolf.workflow.board.entity.BoardUserRole;
+import com.wolf.workflow.board.entity.InvitationStatus;
 import com.wolf.workflow.board.entity.Participation;
-import com.wolf.workflow.board.repository.BoardRepository;
 import com.wolf.workflow.common.exception.NotFoundBoardException;
 import com.wolf.workflow.user.adapter.UserAdapter;
 import com.wolf.workflow.user.entity.User;
@@ -56,7 +57,7 @@ public class BoardService {
    * @throws NotFoundBoardException 보드를 찾을 수 없는 경우
    */
 
-  public BoardResponseDto updateBoard(BoardUpdateRequestDto requestDto, Long boardId, Long userId) {
+  public BoardUpdateResponseDto updateBoard(BoardUpdateRequestDto requestDto, Long boardId, Long userId) {
     User user = userAdapter.getUserById(userId);
     // 보드 존재 여부 체크
     Board board = boardAdapter.getBoardById(boardId);
@@ -85,9 +86,9 @@ public class BoardService {
    * @throws NotFoundBoardException 보드를 찾을 수 없는 경우
    */
 
-  public BoardResponseDto getBoardById(Long boardId) {
+  public BoardGetResponseDto getBoardById(Long boardId) {
     Board board = boardAdapter.getBoardById(boardId);
-    return BoardResponseDto.of(board);
+    return BoardGetResponseDto.of(board);
   }
 
   /**
@@ -100,7 +101,7 @@ public class BoardService {
    * @throws NotFoundBoardException 보드를 찾을 수 없는 경우
    */
   @Transactional(readOnly = true)
-  public Page<BoardResponseDto> getAllBoards(
+  public Page<BoardGetResponseDto> getAllBoards(
       int page, int size, String sortBy, boolean isAsc) {
 
     // 정렬 세팅
@@ -110,7 +111,7 @@ public class BoardService {
 
     // 보드 전체 조회 페이지
     Page<Board> boardPage = boardAdapter.getAllBoards(pageable);
-    return boardPage.map(BoardResponseDto::of);
+    return boardPage.map(BoardGetResponseDto::of);
   }
 
   /**
@@ -130,8 +131,9 @@ public class BoardService {
     // 초대하려는 사용자가 이미 보드에 초대된 경우 체크
     boardUserAdapter.BoardUserExists(boardId, userId);
 
-    BoardUser newBoardUser = new BoardUser(board, user, Participation.ENABLE,
-        BoardUserRole.ASSIGNEE);
+    BoardUser newBoardUser = BoardUser.createBoardUser(
+        board, user, Participation.ENABLE, BoardUserRole.ASSIGNEE, InvitationStatus.ACCEPTED
+    );
     boardUserAdapter.saveBoardUser(newBoardUser);
   }
 

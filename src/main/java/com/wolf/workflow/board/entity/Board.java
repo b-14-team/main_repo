@@ -27,7 +27,7 @@ public class Board extends Timestamped {
     private String content;
 
     @Builder
-    public Board(String board_name, String content) {
+    private Board(String board_name, String content) {
         this.board_name = board_name;
         this.content =content;
     }
