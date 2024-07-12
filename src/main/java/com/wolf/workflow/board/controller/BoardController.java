@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class BoardController {
 
   private final BoardService boardService;
-  private final MessageUtil messageUtil;
   private final BoardUserAdapter boardUserAdapter;
 
   /**
@@ -152,7 +151,7 @@ public class BoardController {
       @PathVariable Long boardId,
       @PathVariable Long userId,
       @RequestParam boolean approve) {
-    boardUserAdapter.approveInvitation(boardId, userId, approve);
+    boardService.approveInvitation(boardId, userId, approve);
     String message = approve ? "초대 승인되었습니다." : "초대 거절되었습니다.";
 
     return ResponseEntity.status(HttpStatus.OK)
