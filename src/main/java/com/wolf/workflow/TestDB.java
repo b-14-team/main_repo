@@ -1,11 +1,16 @@
 package com.wolf.workflow;
 
+import com.wolf.workflow.board.entity.Board;
+import com.wolf.workflow.board.entity.BoardUser;
+import com.wolf.workflow.column.entity.Columns;
 import com.wolf.workflow.user.entity.User;
 import com.wolf.workflow.user.entity.UserRole;
 import com.wolf.workflow.user.entity.UserStatus;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +24,10 @@ public class TestDB {
     @PostConstruct
     public void init() {
         initService.dbInit1();
+        initService.dbInit2();
+        initService.dbInit3();
+        initService.dbInit4();
+        initService.dbInit5();
     }
 
     @Component
@@ -28,8 +37,8 @@ public class TestDB {
 
         private final EntityManager em;
 
-//        @Autowired
-//        PasswordEncoder passwordEncoder;
+        @Autowired
+        PasswordEncoder passwordEncoder;
 
         public void dbInit1() {
             /**
@@ -37,13 +46,45 @@ public class TestDB {
              */
             User consumer = User.builder()
                     .email("b14user@gmail.com")
-                    .password("Passw0rd!")
+                    .password(passwordEncoder.encode("Passw0rd!"))
                     .nickName("닉네임이요~~")
                     .description("한줄 소개")
                     .userStatus(UserStatus.ENABLE)
                     .userRole(UserRole.USER)
                     .build();
             save(consumer);
+        }
+
+        public void dbInit2() {
+            Board board = Board.builder()
+                    .board_name("테스트용 보드")
+                    .content("테스트용 보드입니다")
+                    .build();
+            save(board);
+        }
+
+        public void dbInit3() {
+            Columns columns = Columns.builder()
+                    .columnsStatus("진행전")
+                    .color("초록")
+                    .build();
+            save(columns);
+        }
+
+        public void dbInit4() {
+            Columns columns = Columns.builder()
+                    .columnsStatus("진행중")
+                    .color("파랑")
+                    .build();
+            save(columns);
+        }
+
+        public void dbInit5() {
+            Columns columns = Columns.builder()
+                    .columnsStatus("진행중")
+                    .color("보라")
+                    .build();
+            save(columns);
         }
 
 
