@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +32,10 @@ public class BoardUser {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Participation participation;
@@ -39,4 +44,32 @@ public class BoardUser {
     @Column(nullable = false)
     private BoardUserRole boardUserRole;
 
+    @Enumerated(EnumType.STRING)
+    private InvitationStatus invitationStatus;
+
+    @Builder
+    private BoardUser(Board board, User user, Participation participation,
+        BoardUserRole boardUserRole, InvitationStatus invitationStatus) {
+        this.board = board;
+        this.user = user;
+        this.participation = participation;
+        this.boardUserRole = boardUserRole;
+        this.invitationStatus = invitationStatus;
+    }
+    public static BoardUser createBoardUser(Board board, User user, Participation participation,
+        BoardUserRole boardUserRole, InvitationStatus invitationStatus) {
+        return BoardUser.builder()
+            .board(board)
+            .user(user)
+            .participation(participation)
+            .boardUserRole(boardUserRole)
+            .invitationStatus(invitationStatus)
+            .build();
+    }
+
+    public void updateInvitationStatus(boolean approve) {
+        this.invitationStatus = approve ? InvitationStatus.ACCEPTED : InvitationStatus.DECLINED;
+    }
+
 }
+
