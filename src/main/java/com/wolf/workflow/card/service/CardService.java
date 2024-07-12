@@ -221,15 +221,24 @@ public class CardService {
         List<Card> cards = cardAdapter.getCardsByColumnId(columnId);
         List<CardsGetByColumnId> cardsGetByColumnIdList = new ArrayList<>();
 
+        //assigneeId 리스트 뽑아오기 및 assigneeId로 BoardUser 리스트 가져오기
+        List<Long> assigneeIds = cards.stream().filter(c -> c.getAssigneeId() != null)
+                .map(Card::getAssigneeId).toList();
+        List<BoardUser> boardUsers = boardUserAdapter.getBoardUsersByIds(assigneeIds);
+
+        Map<Long, BoardUser> boardUserMap = boardUsers.stream()
+                .collect(Collectors.toMap(bu -> bu.getUser().getId(),
+                        bu -> bu));
+
+
         for (Card card : cards) {
-            // assigneeId가 있는 카드의 경우
-            if (Objects.nonNull(card.getAssigneeId())) {
-                BoardUser boardUser = boardUserAdapter.getBoardUserById(card.getAssigneeId());
-                cardsGetByColumnIdList.add(CardsGetByColumnId.of(card, card.getColumns(), boardUser.getUser().getNickName()));
-            } else {
-                // assigneeId가 없는 카드의 경우
-                cardsGetByColumnIdList.add(CardsGetByColumnId.of(card, card.getColumns(), null));
+            Long assigneeId = card.getAssigneeId();
+            String nickName = null;
+            if (boardUserMap.containsKey(assigneeId) && assigneeId != null) {
+                nickName = boardUserMap.get(assigneeId).getUser().getNickName();
             }
+            cardsGetByColumnIdList.add(CardsGetByColumnId.of(card, card.getColumns(), nickName));
+
         }
 
         return cardsGetByColumnIdList;
