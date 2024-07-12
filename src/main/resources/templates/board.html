@@ -4,116 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>칸반보드</title>
-    <style>
-        /* 스타일 정의 */
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .board {
-            display: flex;
-            gap: 10px;
-            padding: 20px;
-        }
-        .column {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 200px;
-            padding: 10px;
-            background-color: #f4f4f4;
-        }
-        .column-header {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #fff;
-            cursor: move;
-        }
-        .button-container {
-            margin-top: 10px;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #f4f4f4;
-            border-bottom: 1px solid #ccc;
-        }
-        .header .buttons {
-            display: flex;
-            gap: 5px;
-        }
-        .header .buttons button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .header .buttons .add-button {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .header .buttons .collab-button {
-            background-color: #008CBA;
-            color: white;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            width: 300px;
-        }
-        .modal-header {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-        .modal-body label {
-            display: block;
-            margin: 5px 0;
-        }
-        .modal-body input, .modal-body select, .modal-body textarea {
-            width: 100%;
-            padding: 5px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-        .modal-footer button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .cancel-button {
-            background-color: #f44336;
-            color: white;
-        }
-        .confirm-button {
-            background-color: #4CAF50;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"> </script>
 </head>
@@ -128,21 +19,17 @@
 <div class="board" id="board">
     <div class="column" id="column1">
         <div class="column-header">시작전</div>
-        <div class="card">할 일 1</div>
-        <div class="card">할 일 2</div>
     </div>
     <div class="column" id="column2">
         <div class="column-header">진행중</div>
-        <div class="card">할 일 3</div>
     </div>
     <div class="column" id="column3">
         <div class="column-header">완료</div>
-        <div class="card">할 일 4</div>
     </div>
     <div class="column" id="column4">
         <div class="column-header">긴급</div>
-        <div class="card">할 일 5</div>
-        <div class="card">할 일 6</div>
+        <div class="card">할 일 1</div>
+        <div class="card">할 일 2</div>
         <button class="add-button" onclick="showModal()">할 일 추가하기</button>
     </div>
 </div>
@@ -179,6 +66,13 @@
 </div>
 
 <script>
+    const columnIdMap = {
+        "시작전": 1,
+        "진행중": 2,
+        "완료": 3,
+        "긴급": 4
+    };
+
     // 각 칼럼을 드래그 가능하게 만듭니다.
     var columns = document.querySelectorAll('.column');
     columns.forEach(column => {
@@ -244,20 +138,23 @@
         closeModal();
     }
 
-
     // 카드 추가 기능 (백엔드와 통신)
     function addCard(cardDto) {
         console.log("Sending cardDto:", cardDto);  // 디버깅을 위한 로그 추가
+
+        // 상태에 맞는 칼럼 ID를 가져옵니다.
+        var columnId = columnIdMap[cardDto.status];
+
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:8080/cards/1',
+            url: `http://localhost:8080/cards/${columnId}`,  // URL에 칼럼 ID를 포함
             crossOrigin: true,
             contentType: 'application/json',
             data: JSON.stringify(cardDto),
             success: function (response) {
                 alert("생성 완료");
                 addCardToColumn(response);
-                return;// 백엔드 응답을 이용해 카드 추가
+                return;  // 백엔드 응답을 이용해 카드 추가
             },
             error: function (error, status, request) {
                 console.error("Error:", error);  // 오류 로그 추가
@@ -265,7 +162,6 @@
             },
         });
     }
-
 
     // 카드 추가 칼럼 선택 기능
     function addCardToColumn(card) {
