@@ -189,15 +189,21 @@ public class CardService {
         List<Card> cards = cardAdapter.getCardsByAssigneeId(assigneeId);
         List<CardsGetByAssigneeId> cardsGetByAssigneeIdList = new ArrayList<>();
 
-        // assigneeId가 있는 카드의 경우만 조회하면 됨
-        for (Card card : cards) {
-            // assigneeId가 있는 카드의 경우
-            if (Objects.nonNull(card.getAssigneeId())) {
-                BoardUser boardUser = boardUserAdapter.getBoardUserById(card.getAssigneeId());
-                cardsGetByAssigneeIdList.add(CardsGetByAssigneeId.of(card, card.getColumns(), boardUser.getUser().getNickName()));
-            }
-        }
+        //assigneeId 리스트 뽑아오기 및 assigneeId로 BoardUser 리스트 가져오기
+        List<Long> assigneeIds = cards.stream().filter(c -> c.getAssigneeId() != null)
+                .map(Card::getAssigneeId).toList();
+        List<BoardUser> boardUsers = boardUserAdapter.getBoardUsersByIds(assigneeIds);
 
+        Map<Long, BoardUser> boardUserMap = boardUsers.stream()
+                .collect(Collectors.toMap(bu -> bu.getUser().getId(),
+                        bu -> bu));
+
+
+        for (Card card : cards) {
+            String nickName = boardUserMap.get(assigneeId).getUser().getNickName();
+            cardsGetByAssigneeIdList.add(CardsGetByAssigneeId.of(card, card.getColumns(), nickName));
+
+        }
         return cardsGetByAssigneeIdList;
     }
 

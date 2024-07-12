@@ -61,6 +61,7 @@ public class User extends Timestamped {
         this.description = description;
         this.commentList = commentList;
         this.boardUserList = boardUserList;
+        this.userRole = userRole;
         this.userStatus = userStatus;
     }
 
