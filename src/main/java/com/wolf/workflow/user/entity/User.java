@@ -54,8 +54,8 @@ public class User extends Timestamped {
 
     @Builder
     public User(String email, String password, String nickName, String description,
-                String refreshToken, List<Comment> commentList, List<BoardUser> boardUserList,
-                UserRole userRole, UserStatus userStatus) {
+            String refreshToken, List<Comment> commentList, List<BoardUser> boardUserList,
+            UserRole userRole, UserStatus userStatus) {
         this.email = email;
         this.password = password;
         this.nickName = nickName;

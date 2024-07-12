@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum CommonErrorCode implements ErrorCode {
 
     BAD_REQUEST(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name()),
+    FORBIDDEN(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.name()),
     ;
 
     private final int statusCode;
