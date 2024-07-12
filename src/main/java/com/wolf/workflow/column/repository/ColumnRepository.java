@@ -7,5 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ColumnRepository extends JpaRepository<Columns, Long> {
 
-  boolean isExistsByColumnsStatus(String columnsStatus);
+//  이부분 레포지토리에서 못찾아서 주석 해 놓았습니다!!
+//  boolean isExistsByColumnsStatus(String columnsStatus);
+
+  boolean existsByColumnsStatus(String columnsStatus);
 }
