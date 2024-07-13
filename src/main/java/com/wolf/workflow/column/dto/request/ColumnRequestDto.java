@@ -12,4 +12,5 @@ public class ColumnRequestDto {
   @NotBlank(message = "공백 없이 입력해야합니다.")
   private String columnsStatus;
   private String color;
+  private Long userId;
 }

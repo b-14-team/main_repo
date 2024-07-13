@@ -4,13 +4,10 @@ import com.wolf.workflow.board.entity.Board;
 import com.wolf.workflow.card.entity.Card;
 import com.wolf.workflow.common.Timestamped;
 import jakarta.persistence.*;
-import java.util.LinkedList;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +24,8 @@ public class Columns extends Timestamped {
 
     @Column(name = "column_status", nullable = false)
     private String columnsStatus;
+
+    private int move;
 
     @Column(name = "number_of_card", nullable = false)
     private Long numberOfCard = 0L;
@@ -59,5 +58,9 @@ public class Columns extends Timestamped {
     public void updateColumn(String columnsStatus, String color) {
         this.columnsStatus = columnsStatus;
         this.color = color;
+    }
+
+    public void ColumnMove(int move) {
+        this.move = move;
     }
 }

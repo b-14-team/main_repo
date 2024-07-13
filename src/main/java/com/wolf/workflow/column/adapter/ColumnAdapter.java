@@ -5,10 +5,9 @@ import com.wolf.workflow.column.repository.ColumnRepository;
 import com.wolf.workflow.common.exception.DuplicatedColumnException;
 import com.wolf.workflow.common.exception.NotFoundColumnException;
 import com.wolf.workflow.common.util.MessageUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Locale;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +22,10 @@ public class ColumnAdapter {
         return columnRepository.save(columns);
     }
 
+    public List<Columns> getAllColumns() {
+        return columnRepository.findAll();
+    }
+
     public Columns findColumnsById(Long columnId) {
         return columnRepository.findById(columnId)
             .orElseThrow(() -> new NotFoundColumnException(MessageUtil.getMessage("already.exist.column")));
@@ -30,6 +33,10 @@ public class ColumnAdapter {
 
     public void deleteColumn(Columns columns) {
         columnRepository.delete(columns);
+    }
+
+    public void updateColumn(Columns columns) {
+        columnRepository.save(columns);
     }
 
 }
