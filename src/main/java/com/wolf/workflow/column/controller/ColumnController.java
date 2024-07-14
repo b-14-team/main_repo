@@ -1,6 +1,7 @@
 package com.wolf.workflow.column.controller;
 
 
+import com.wolf.workflow.column.dto.request.ColumnMoveRequestDto;
 import com.wolf.workflow.column.dto.request.ColumnRequestDto;
 import com.wolf.workflow.column.dto.response.ColumnResponseDto;
 import com.wolf.workflow.column.service.ColumnService;
@@ -41,4 +42,11 @@ public class ColumnController {
     columnService.deleteColumn(columnId, userId);
     return ResponseEntity.noContent().build();
   }
+
+  @PutMapping("/move")
+  public ResponseEntity<Void> moveColumn(@Valid @RequestBody ColumnMoveRequestDto columnMoveRequestDto) {
+    columnService.moveColumn(columnMoveRequestDto);
+    return ResponseEntity.ok().build();
+  }
+
 }
