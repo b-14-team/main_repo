@@ -63,7 +63,7 @@ public class Columns extends Timestamped {
         this.color = color;
     }
 
-    public void ColumnMove(int move) {
+    public void columnMove(int move) {
         this.move = move;
     }
 }

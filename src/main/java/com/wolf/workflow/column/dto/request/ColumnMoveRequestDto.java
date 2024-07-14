@@ -12,5 +12,4 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ColumnMoveRequestDto {
   private List<Long> columnIds;
-  private Long userId;
 }
