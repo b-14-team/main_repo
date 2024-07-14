@@ -17,37 +17,38 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ColumnAdapter {
 
-    private final ColumnRepository columnRepository;
-    private final BoardUserRepository boardUserRepository;
+  private final ColumnRepository columnRepository;
+  private final BoardUserRepository boardUserRepository;
 
-    public Columns createColumn(Columns columns) {
-        if (columnRepository. existsByColumnsStatus(columns.getColumnsStatus())) {
-            throw new DuplicatedColumnException(MessageUtil.getMessage("already.exist.column"));
-        }
-        return columnRepository.save(columns);
+  public Columns createColumn(Columns columns) {
+    if (columnRepository.existsByColumnsStatus(columns.getColumnsStatus())) {
+      throw new DuplicatedColumnException(MessageUtil.getMessage("already.exist.column"));
+    }
+    return columnRepository.save(columns);
+  }
+
+  public void deleteColumn(Columns columns) {
+    columnRepository.delete(columns);
+  }
+
+  public List<Columns> getAllColumns() {
+    return columnRepository.findAll();
+  }
+
+  public Columns findColumnsById(Long columnId) {
+    return columnRepository.findById(columnId)
+        .orElseThrow(
+            () -> new NotFoundColumnException(MessageUtil.getMessage("already.exist.column")));
+  }
+
+  public BoardUser getBoardUser(Long boardId, Long userId) {
+    BoardUser boardUser = boardUserRepository.findByBoardIdAndUserId(boardId, userId);
+
+    if (boardUser == null || boardUser.getParticipation() != Participation.ENABLE) {
+      throw new UnauthorizedUserException(MessageUtil.getMessage("User is not authorized"));
     }
 
-    public void deleteColumn(Columns columns) {
-        columnRepository.delete(columns);
-    }
-
-    public List<Columns> getAllColumns() {
-        return columnRepository.findAll();
-    }
-
-    public Columns findColumnsById(Long columnId) {
-        return columnRepository.findById(columnId)
-            .orElseThrow(() -> new NotFoundColumnException(MessageUtil.getMessage("already.exist.column")));
-    }
-
-    public BoardUser getBoardUser(Long boardId, Long userId) {
-        BoardUser boardUser = boardUserRepository.findByBoardIdAndUserId(boardId, userId);
-
-        if (boardUser == null || boardUser.getParticipation() != Participation.ENABLE) {
-            throw new UnauthorizedUserException(MessageUtil.getMessage("User is not authorized"));
-        }
-
-        return boardUser;
-    }
+    return boardUser;
+  }
 
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ColumnResponseDto {
+
   private Long id;
   private String columnsStatus;
   private String color;

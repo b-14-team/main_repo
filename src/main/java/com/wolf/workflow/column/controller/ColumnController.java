@@ -24,6 +24,7 @@ public class ColumnController {
       @RequestParam Long userId,
       @Valid @RequestBody ColumnRequestDto requestDto) {
     ColumnResponseDto responseDto = columnService.createColumn(boardId, userId, requestDto);
+
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(ApiResponse.of(responseDto));
   }
@@ -33,7 +34,9 @@ public class ColumnController {
       @RequestParam Long boardId,
       @RequestParam Long userId,
       @Valid @RequestBody ColumnRequestDto requestDto) {
-    ColumnResponseDto responseDto = columnService.updateColumn(boardId, userId, columnId, requestDto);
+    ColumnResponseDto responseDto = columnService.updateColumn(boardId, userId, columnId,
+        requestDto);
+
     return ResponseEntity.status(HttpStatus.OK)
         .body(ApiResponse.of(responseDto));
   }
@@ -43,15 +46,18 @@ public class ColumnController {
       @RequestParam Long boardId,
       @RequestParam Long userId) {
     columnService.deleteColumn(boardId, columnId, userId);
+
     return ResponseEntity.status(HttpStatus.OK)
         .body(ApiResponse.of("칼럼이 삭제되었습니다."));
   }
 
   @PutMapping("/move")
-  public ResponseEntity<ApiResponse<String>> moveColumn(@Valid @RequestBody ColumnMoveRequestDto columnMoveRequestDto,
+  public ResponseEntity<ApiResponse<String>> moveColumn(
+      @Valid @RequestBody ColumnMoveRequestDto columnMoveRequestDto,
       @RequestParam Long userId,
       @RequestParam Long boardId) {
     columnService.moveColumn(boardId, userId, columnMoveRequestDto);
+
     return ResponseEntity.status(HttpStatus.OK)
         .body(ApiResponse.of("칼럼이 이동되었습니다."));
   }
