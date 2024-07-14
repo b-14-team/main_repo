@@ -1,6 +1,7 @@
 
-let auth = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIwZDY4ZWFlMC0xNmM1LTQzYmMtODRmNy0wMTNkOWNiMzM2ODkiLCJzdWIiOiJiMTR1c2VyQGdtYWlsLmNvbSIsImF1dGgiOiJVU0VSIiwiaWF0IjoxNzIwOTc0OTcyLCJleHAiOjE3MjA5ODIxNzIsInRva2VuVHlwZSI6ImFjY2VzcyJ9.Vja5BdFB5TDnJIQXI1aVmP1lPFlV_0i8bMFObR2Qcpc";
+let auth = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4NDU3YjQzOS05NTBiLTRjNmQtYTVmNy01ODgzZGJjOWYyYmUiLCJzdWIiOiJiMTR1c2VyQGdtYWlsLmNvbSIsImF1dGgiOiJVU0VSIiwiaWF0IjoxNzIwOTkwMTQ1LCJleHAiOjE3MjA5OTczNDUsInRva2VuVHlwZSI6ImFjY2VzcyJ9.D--kFASAVny2A32w3OK29RLLsbCeYyOUj9aSChxNIhA";
 let draggedCard;
+let boardId = 1;
 $(document).ready(function () {
 
     var columnMap = {};
@@ -132,8 +133,42 @@ $(document).ready(function () {
         });
     }
 
+    function loadAssignees() {
+        $.ajax({
+            url: `http://localhost:8080/boards/${boardId}/assignees`, // 실제 API URL
+            method: 'GET',
+            success: function(response) {
+                const assigneeSelect = $('#taskAssignee');
+                assigneeSelect.empty(); // 기존 옵션 제거
+
+                // 기본 옵션 추가
+                assigneeSelect.append('<option value="">작업자를 선택하세요</option>');
+
+                // 작업자 목록 추가
+                const assignees = response.data; // response.data를 사용해야 함
+                populateAssigneeSelect(assignees);
+            },
+            error: function(xhr) {
+                console.error('Error loading assignees:', xhr);
+            }
+        });
+    }
+
+    function populateAssigneeSelect(assignees) {
+        var assigneeSelect = document.getElementById('taskAssignee');
+        // 기존 옵션 제거
+        assigneeSelect.innerHTML = '<option value="">작업자를 선택하세요</option>';
+        assignees.forEach(assignee => {
+            var option = document.createElement('option');
+            option.value = assignee.assigneeId; // assigneeId로 변경
+            option.textContent = assignee.nickName; // nickName으로 변경
+            assigneeSelect.appendChild(option);
+        });
+    }
 
 
+
+    loadAssignees();
     loadColumns();
 });
 

@@ -107,8 +107,9 @@ public class SecurityConfig {
                 .requestMatchers("/favicon.ico").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/signup").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/reissue").permitAll()
-                .requestMatchers("/cards/**").permitAll()
-                .requestMatchers("/columns/**").permitAll()
+                .requestMatchers("/cards/**").permitAll() // 로그인 페이지가 없어서 프론트 임시 허용
+                .requestMatchers("/columns/**").permitAll() // 로그인 페이지가 없어서 프론트 임시 허용
+                .requestMatchers("/boards/**").permitAll()// 로그인 페이지가 없어서 프론트 임시 허용
                 .requestMatchers("/").permitAll()
                 .anyRequest().authenticated()
         );

@@ -169,6 +169,7 @@ public class BoardController {
    * @param boardId
    * @return
    */
+  @ResponseBody
   @GetMapping("/{boardId}/assignees")
   public ResponseEntity<ApiResponse<List<AssigneeResponseDto>>> getAssignees(@PathVariable Long boardId) {
 
