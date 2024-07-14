@@ -72,7 +72,7 @@ public class TestDB {
         public void dbInit3() {
             Columns columns = Columns.builder()
                     .columnsStatus("시작전")
-                    .color("초록")
+                    .color("green")
                     .build();
             save(columns);
 
@@ -82,7 +82,7 @@ public class TestDB {
         public void dbInit4() {
             Columns columns = Columns.builder()
                     .columnsStatus("진행중")
-                    .color("파랑")
+                    .color("blue")
                     .build();
             save(columns);
         }
@@ -90,7 +90,7 @@ public class TestDB {
         public void dbInit5() {
             Columns columns = Columns.builder()
                     .columnsStatus("완료")
-                    .color("보라")
+                    .color("purple")
                     .build();
             save(columns);
         }

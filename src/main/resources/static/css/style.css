@@ -19,12 +19,11 @@ body {
     margin-bottom: 10px;
 }
 .card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 2px solid#cccccc;
     padding: 10px;
-    margin-bottom: 10px;
-    background-color: #fff;
-    cursor: move;
+    margin: 5px;
+    border-radius: 5px;
+    /* 기타 스타일... */
 }
 .button-container {
     margin-top: 10px;
