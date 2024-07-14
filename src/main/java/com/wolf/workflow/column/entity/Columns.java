@@ -25,6 +25,7 @@ public class Columns extends Timestamped {
     @Column(name = "column_status", nullable = false)
     private String columnsStatus;
 
+    @Column(name = "move", nullable = false)
     private int move;
 
     @Column(name = "number_of_card", nullable = false)
@@ -43,15 +44,17 @@ public class Columns extends Timestamped {
     private List<Card> cardList = new ArrayList<>();
 
     @Builder
-    private Columns(String columnsStatus, String color) {
+    private Columns(String columnsStatus, String color, int move) {
         this.columnsStatus = columnsStatus;
         this.color = color;
+        this.move = move;
     }
 
-    public static Columns createColumn(String columnsStatus, String color) {
+    public static Columns createColumn(String columnsStatus, String color, int move) {
         return Columns.builder()
             .columnsStatus(columnsStatus)
             .color(color)
+            .move(move)
             .build();
     }
 

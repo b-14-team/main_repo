@@ -35,7 +35,10 @@ public class ColumnService {
   public ColumnResponseDto createColumn(ColumnRequestDto requestDto) {
     User user = getUserFromRequest(requestDto);
 
-    Columns columns = Columns.createColumn(requestDto.getColumnsStatus(), requestDto.getColor());
+    List<Columns> allColumns = columnAdapter.getAllColumns();
+    int orderNumber = allColumns.size() + 1;
+
+    Columns columns = Columns.createColumn(requestDto.getColumnsStatus(), requestDto.getColor(), orderNumber);
     columnAdapter.createColumn(columns);
 
     return ColumnResponseDto.of(columns);
