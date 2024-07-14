@@ -121,6 +121,8 @@ public class CardController {
     }
 
     /**
+     * 카드 삭제
+     *
      * @param cardId
      * @return msg
      */
@@ -132,6 +134,22 @@ public class CardController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.of(msg));
 
+    }
+
+    /**
+     * 카드 이동하기
+     *
+     * @param cardId
+     * @param columnId
+     * @return msg
+     */
+    @ResponseBody
+    @PatchMapping("{cardId}/move/{columnId}")
+    public ResponseEntity<ApiResponse<String>> moveCard(@PathVariable Long cardId, @PathVariable Long columnId) {
+        String msg = cardService.moveCard(cardId,columnId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.of(msg));
     }
 
 }

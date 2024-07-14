@@ -262,9 +262,34 @@ public class CardService {
         return cardId + " 번 카드 삭제 완료 되었습니다.";
     }
 
+    /**
+     * 카드 이동하기
+     *
+     * @param cardId
+     * @param columnId
+     * @return cardId + " 번 카드아이디 " + columnId + " 번 칼럼으로 이동";
+     * @throws NotFoundColumnException 칼럼아이디로 칼럼을 찾을 수 없을 때
+     * @throws NotFoundCardException 카드아이디로 카드를 찾을 수 없을 때
+     */
+    @Transactional
+    public String moveCard(Long cardId, Long columnId) {
+
+        //cardId로 카드 찾아오기
+        Card card = cardAdapter.getCardById(cardId);
+        // columId로 칼럼 찾아오기
+        Columns columns = columnAdapter.findColumnsById(columnId);
+
+        card.updateMoveCard(columns);
+
+        return cardId + " 번 카드아이디 " + columnId + " 번 칼럼으로 이동";
+    }
+
     private void checkDeadDate(LocalDate deadDate) {
         if (deadDate.isBefore(LocalDate.now())) {
             throw new InvalidDeadDateException(MessageUtil.getMessage("invalid.deadDate"));
         }
     }
+
+
+
 }

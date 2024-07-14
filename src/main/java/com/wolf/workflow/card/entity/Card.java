@@ -52,6 +52,11 @@ public class Card extends Timestamped {
         this.deadDate = deadDate;
     }
 
+    public void updateMoveCard(Columns columns) {
+        this.columns = columns;
+    }
+
+
     public static Card createCard(CardCreateRequestDto requestDto, Columns columns) {
         return Card.builder()
                 .title(requestDto.getTitle())
