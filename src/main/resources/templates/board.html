@@ -34,13 +34,6 @@
         <div class="modal-body">
             <label for="taskTitle">제목 *</label>
             <input type="text" id="taskTitle" required>
-            <label for="taskStatus">카드 상태</label>
-            <select id="taskStatus">
-                <option value="1">시작전</option>
-                <option value="2">진행중</option>
-                <option value="3">완료</option>
-                <option value="긴급">긴급</option>
-            </select>
             <label for="taskContent">내용</label>
             <textarea id="taskContent"></textarea>
             <label for="taskDueDate">마감일자</label>
@@ -74,7 +67,7 @@
     // 할 일 추가
     function addTask() {
         var title = document.getElementById('taskTitle').value;
-        var status = document.getElementById('taskStatus').value;
+        var status = columnIdForFind;
         var content = document.getElementById('taskContent').value;
         var dueDate = document.getElementById('taskDueDate').value;
         var assignee = document.getElementById('taskAssignee').value;
