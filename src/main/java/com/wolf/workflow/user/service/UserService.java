@@ -9,6 +9,7 @@ import com.wolf.workflow.user.dto.request.UserResignRequestDto;
 import com.wolf.workflow.user.dto.request.UserSignupRequestDto;
 import com.wolf.workflow.user.entity.User;
 import com.wolf.workflow.user.entity.UserStatus;
+import com.wolf.workflow.user.service.dto.SignupUserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +27,7 @@ public class UserService {
 
     /**
      * 사용자를 생성합니다.
-     *
+     * <p>
      * 사용자 이메일의 중복을 체크하고, 중복이 없으면 새로운 사용자를 생성합니다.
      *
      * @param requestDto 회원가입 요청 데이터를 담고 있는 UserSignupRequestDto 객체. 필수 값입니다.
@@ -35,8 +36,10 @@ public class UserService {
     @Transactional
     public void createUser(UserSignupRequestDto requestDto) {
         userAdapter.checkDuplicatedEmail(requestDto.getEmail());
+        String encodePassword = passwordEncoder.encode(requestDto.getPassword());
 
-        User user = User.createUser(requestDto);
+        SignupUserDto signupUserDto = SignupUserDto.of(requestDto, encodePassword);
+        User user = User.createUser(signupUserDto);
         userAdapter.createUser(user);
     }
 

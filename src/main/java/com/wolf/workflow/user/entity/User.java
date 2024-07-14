@@ -3,7 +3,7 @@ package com.wolf.workflow.user.entity;
 import com.wolf.workflow.board.entity.BoardUser;
 import com.wolf.workflow.comment.entity.Comment;
 import com.wolf.workflow.common.Timestamped;
-import com.wolf.workflow.user.dto.request.UserSignupRequestDto;
+import com.wolf.workflow.user.service.dto.SignupUserDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.util.Assert;
 
 @Entity
 @Getter
@@ -68,7 +67,7 @@ public class User extends Timestamped {
         this.userRole = userRole;
     }
 
-    public static User createUser(UserSignupRequestDto requestDto) {
+    public static User createUser(SignupUserDto requestDto) {
         return User.builder()
                 .email(requestDto.getEmail())
                 .password(requestDto.getPassword())
