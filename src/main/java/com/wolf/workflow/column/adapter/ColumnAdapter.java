@@ -44,7 +44,7 @@ public class ColumnAdapter {
         BoardUser boardUser = boardUserRepository.findByBoardIdAndUserId(boardId, userId);
 
         if (boardUser == null || boardUser.getParticipation() != Participation.ENABLE) {
-            throw new UnauthorizedUserException(MessageUtil.getMessage("already.exist.column"));
+            throw new UnauthorizedUserException(MessageUtil.getMessage("User is not authorized"));
         }
 
         return boardUser;
