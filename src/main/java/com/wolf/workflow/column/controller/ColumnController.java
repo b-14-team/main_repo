@@ -1,6 +1,8 @@
 package com.wolf.workflow.column.controller;
 
 
+import com.wolf.workflow.card.dto.response.CardsGetByColumnId;
+import com.wolf.workflow.card.service.CardService;
 import com.wolf.workflow.column.dto.request.ColumnRequestDto;
 import com.wolf.workflow.column.dto.response.ColumnResponseDto;
 import com.wolf.workflow.column.dto.response.ColumnsResponseDto;
@@ -23,11 +25,18 @@ import java.util.List;
 public class ColumnController {
 
   private final ColumnService columnService;
+  private final CardService cardService;
 
   @GetMapping
   public List<ColumnsResponseDto> getColumns() {
     log.info("getColumns");
-    return columnService.getAllColumns().stream().map(ColumnsResponseDto::new).toList();
+
+    List<Columns> columns = columnService.getAllColumns();
+
+    return columns.stream().map(column -> {
+      List<CardsGetByColumnId> cardList = cardService.getCardsByColumnId(column.getId()); // 카드 목록 가져오기
+      return new ColumnsResponseDto(column, cardList);
+    }).toList();
   }
 
   @PostMapping

@@ -1,9 +1,31 @@
 $(document).ready(function () {
-    const auth = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3NDcyY2M0Ny1iMzg5LTQzOGItODRhMS0xYWIxZmI5OTVmNjUiLCJzdWIiOiJiMTR1c2VyQGdtYWlsLmNvbSIsImF1dGgiOiJVU0VSIiwiaWF0IjoxNzIwNzk3NjcxLCJleHAiOjE3MjA4MDQ4NzEsInRva2VuVHlwZSI6ImFjY2VzcyJ9.pIu5NaSFWwfBnY1p3wHTU-H_T3hNUMAWKiJZfD6ebsA";
-    // 칼럼 데이터를 메모리에 저장할 변수
+    const auth = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxNDljYzg1Yy1lOWJiLTQ2OTktYjg2Mi00NGJmZDY5YTcyNzgiLCJzdWIiOiJiMTR1c2VyQGdtYWlsLmNvbSIsImF1dGgiOiJVU0VSIiwiaWF0IjoxNzIwOTY2NzU5LCJleHAiOjE3MjA5NzM5NTksInRva2VuVHlwZSI6ImFjY2VzcyJ9.gJDPwmxRiK0kdiV0H_RXd9RddgZnDLV-us49H_j3QUE";
+
     var columnMap = {};
 
-    // 카드 데이터를 서버에서 불러옵니다
+
+    function addColumnToBoard(columnData) {
+        var board = document.getElementById('board');
+        var newColumn = document.createElement('div');
+        newColumn.className = 'column';
+        newColumn.id = `column${columnData.id}`;
+        newColumn.innerHTML = `<div class="column-header">${columnData.columnsStatus}</div>
+        <button class="add-button" onclick="showModal(${columnData.id})">할 일 추가하기</button>`;
+        board.appendChild(newColumn);
+
+        // 카드 목록을 올바르게 처리
+        if (Array.isArray(columnData.cardList)) {
+            columnData.cardList.forEach(card => {
+                var newCard = document.createElement('div');
+                newCard.className = 'card';
+                newCard.textContent = card.title; // card.title이 정확한지 확인
+                newColumn.appendChild(newCard);
+            });
+        } else {
+            console.error("Expected an array of cards but got:", columnData.cardList);
+        }
+    }
+
     function loadCards() {
         $.ajax({
             type: 'GET',
@@ -14,7 +36,6 @@ $(document).ready(function () {
             success: function (response) {
                 if (Array.isArray(response)) {
                     response.forEach(card => {
-                        console.log("카드 status: " + card.status);
                         addCardToColumn(card);
                     });
                 } else {
@@ -28,7 +49,6 @@ $(document).ready(function () {
         });
     }
 
-    // 칼럼 데이터를 서버에서 불러옵니다
     function loadColumns() {
         $.ajax({
             type: 'GET',
@@ -37,14 +57,12 @@ $(document).ready(function () {
                 'Authorization': 'Bearer ' + auth
             },
             success: function (response) {
-                console.log("Column data:", response);
+                console.log("Columns response:", response); // 응답 확인
                 if (Array.isArray(response)) {
                     response.forEach(column => {
-                        console.log("컬럼: " + column.columnsStatus);
-                        columnMap[column.columnsStatus] = column.id; // 상태를 ID에 매핑
                         addColumnToBoard(column);
+                        columnMap[column.columnsStatus] = column.id;
                     });
-                    initializeSortable(); // 드래그 가능 초기화
                 } else {
                     console.error("Expected an array but got:", response);
                 }
@@ -56,92 +74,53 @@ $(document).ready(function () {
         });
     }
 
-    // 카드 추가
-    function addCardToColumn(card) {
-        var columnId = columnMap[card.status]; // 카드 상태에 맞는 칼럼 ID 찾기
-        if (columnId) {
-            var column = document.getElementById(`column${columnId}`);
-            if (column) {
-                var newCard = document.createElement('div');
-                newCard.className = 'card';
-                newCard.textContent = card.title;
-                column.appendChild(newCard); // 칼럼의 마지막에 카드 추가
-            } else {
-                console.error("Column with ID " + columnId + " not found.");
-            }
-        } else {
-            console.error("No column found for status: " + card.status);
-        }
-    }
-
-    // 칼럼을 보드에 추가
-    function addColumnToBoard(columnData) {
-        var board = document.getElementById('board');
-        var newColumn = document.createElement('div');
-        newColumn.className = 'column';
-        newColumn.id = `column${columnData.id}`;
-        newColumn.innerHTML = `<div class="column-header">${columnData.columnsStatus}</div>
-            <button class="add-button" onclick="showModal(${columnData.id})">할 일 추가하기</button>`;
-        board.appendChild(newColumn);
-
-        // 칼럼에 포함된 카드들을 추가
-        if (Array.isArray(columnData.cardList)) {
-            columnData.cardList.forEach(card => {
-                var newCard = document.createElement('div');
-                newCard.className = 'card';
-                newCard.textContent = card.title;
-                newColumn.appendChild(newCard); // 칼럼의 마지막에 카드 추가
-            });
-        } else {
-            console.error("Expected an array of cards but got:", columnData.cardList);
-        }
-    }
-
-    // 칼럼 및 보드를 드래그 가능하게 초기화
-    function initializeSortable() {
-        var columns = document.querySelectorAll('.column');
-        columns.forEach(column => {
-            new Sortable(column, {
-                group: 'shared',
-                animation: 150
-            });
-        });
-
-        new Sortable(document.getElementById('board'), {
-            animation: 150,
-            draggable: '.column'
-        });
-    }
 
 
-    // 카드 추가 기능 (백엔드와 통신)
-    function addCard(cardDto, columnId) {
-        console.log("Sending cardDto:", cardDto);
-
-        $.ajax({
-            type: 'POST',
-            url: `http://localhost:8080/cards/${columnId}`,
-            crossOrigin: true,
-            contentType: 'application/json',
-            data: JSON.stringify(cardDto),
-            success: function (response) {
-                alert("생성 완료");
-                addCardToColumn(response); // 응답 받은 카드로 칼럼에 추가
-            },
-            error: function (error) {
-                console.error("Error:", error);
-                alert("다시 입력해 주세요");
-            },
-        });
-    }
-
-    // 페이지 로드 후 카드 및 칼럼 데이터 로드
-
-    loadCards();
     loadColumns();
 });
 
 
 
+// 카드 추가 기능 (백엔드와 통신)
+function addCard(cardDto, columnId) {
+    console.log("Sending cardDto:", cardDto);
 
+    $.ajax({
+        type: 'POST',
+        url: `http://localhost:8080/cards/${columnId}`,
+        crossOrigin: true,
+        contentType: 'application/json',
+        data: JSON.stringify(cardDto),
+        success: function (response) {
+            alert("생성 완료");
+            addCardToColumn(response); // 응답 받은 카드로 칼럼에 추가
+        },
+        error: function (error) {
+            console.error("Error:", error);
+            alert("다시 입력해 주세요");
+        },
+    });
+}
+
+function addCardToColumn(card) {
+    if (!card || !card.status) {
+        console.error("Invalid card data:", card);
+        return;
+    }
+
+    var columnId = columnMap[card.status];
+    if (columnId) {
+        var column = document.getElementById(`column${columnId}`);
+        if (column) {
+            var newCard = document.createElement('div');
+            newCard.className = 'card';
+            newCard.textContent = card.title;
+            column.appendChild(newCard);
+        } else {
+            console.error("Column with ID " + columnId + " not found.");
+        }
+    } else {
+        console.error("No column found for status: " + card.status);
+    }
+}
 

@@ -59,9 +59,6 @@
     </div>
 </div>
 
-</body>
-</html>
-
 <script>
     var columnIdForFind;
 
@@ -98,8 +95,6 @@
             status: status
         };
 
-        console.log("Created task:", task);
-
         // cardDto 객체 생성
         var cardDto = {
             title: title,
@@ -110,32 +105,11 @@
             tasks: [task]
         };
 
-        console.log("Created cardDto with task:", cardDto);
-
-        addCard(cardDto);
+        addCard(cardDto,columnIdForFind);
         closeModal();
     }
 
-    // 카드 추가 기능 (백엔드와 통신)
-    function addCard(cardDto) {
-        console.log("Sending cardDto:", cardDto);
-
-        $.ajax({
-            type: 'POST',
-            url: `http://localhost:8080/cards/${columnIdForFind}`,
-            crossOrigin: true,
-            contentType: 'application/json',
-            data: JSON.stringify(cardDto),
-            success: function (response) {
-                alert("생성 완료");
-                addCardToColumn(response); // 응답 받은 카드로 칼럼에 추가
-            },
-            error: function (error) {
-                console.error("Error:", error);
-                alert("다시 입력해 주세요");
-            },
-        });
-    }
-
-
 </script>
+
+</body>
+</html>
