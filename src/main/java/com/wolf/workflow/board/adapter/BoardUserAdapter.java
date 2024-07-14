@@ -45,4 +45,8 @@ public class BoardUserAdapter {
     public List<BoardUser> getBoardUsersByIds(List<Long> ids) {
         return boardUserRepository.findAllByIdIn(ids);
     }
+
+    public List<BoardUser> getBoardUsersByBoardId(Long boardId) {
+        return boardUserRepository.findByBoardId(boardId);
+    }
 }

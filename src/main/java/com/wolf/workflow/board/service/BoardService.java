@@ -4,6 +4,7 @@ import com.wolf.workflow.board.adapter.BoardAdapter;
 import com.wolf.workflow.board.adapter.BoardUserAdapter;
 import com.wolf.workflow.board.dto.request.BoardRequestDto;
 import com.wolf.workflow.board.dto.request.BoardUpdateRequestDto;
+import com.wolf.workflow.board.dto.response.AssigneeResponseDto;
 import com.wolf.workflow.board.dto.response.BoardGetResponseDto;
 import com.wolf.workflow.board.dto.response.BoardResponseDto;
 import com.wolf.workflow.board.dto.response.BoardUpdateResponseDto;
@@ -22,6 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -147,6 +151,26 @@ public class BoardService {
   @Transactional
   public void approveInvitation(Long boardId, Long userId, boolean approve) {
     boardUserAdapter.approveInvitation(boardId, userId, approve);
+  }
+
+  /**
+   *  보드 유저리스트 찾기
+   *
+   * @param boardId
+   * @return List<AssigneeResponseDto>
+   */
+  public List<AssigneeResponseDto> getAssigneesByBoardId(Long boardId) {
+
+    // 보드 존재 여부 체크
+    Board board = boardAdapter.getBoardById(boardId);
+
+    // 보드에 속한 BoardUser 리스트 가져오기
+    List<BoardUser> boardUsers = boardUserAdapter.getBoardUsersByBoardId(boardId);
+
+    // BoardUser 리스트를 AssigneeResponseDto 리스트로 변환
+    return boardUsers.stream()
+            .map(boardUser -> new AssigneeResponseDto(boardUser.getUser().getId(), boardUser.getUser().getNickName()))
+            .collect(Collectors.toList());
   }
 }
 
