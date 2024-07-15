@@ -60,6 +60,30 @@
     </div>
 </div>
 
+<!-- 수정 모달 -->
+<div id="updateModal" class="update-modal">
+    <div class="modal-content">
+        <div class="modal-header">할 일 수정</div>
+        <div class="modal-body">
+            <label for="taskTitle">제목 *</label>
+            <input type="text" id="updateTitle" required>
+            <label for="taskContent">내용</label>
+            <textarea id="updateContent"></textarea>
+            <label for="taskDueDate">마감일자</label>
+            <input type="date" id="updateDueDate">
+            <label for="taskAssignee">작업자</label>
+            <select id="updateAssignee">
+            <option value="">작업자를 선택하세요</option>
+            <!-- 작업자 목록이 여기에 동적으로 추가됩니다 -->
+        </select>
+        <div class="modal-footer">
+        <button class="confirm-button" onclick="updateAddTask()">저장</button> <!-- 수정된 함수 호출 -->
+        <button class="cancel-button" onclick="closeUpdateModal()">취소</button>
+        </div>
+    </div>
+</div>
+</div>
+
 
 <script>
     var columnIdForFind;
@@ -67,6 +91,7 @@
     // 모달 열기
     function showModal(columnId) {
         document.getElementById('modal').style.display = 'flex';
+        loadAssignees('taskAssignee'); // 할 일 추가 모달의 작업자 목록 로드
         columnIdForFind = columnId;
     }
 
@@ -75,7 +100,7 @@
         document.getElementById('modal').style.display = 'none';
     }
 
-    // 할 일 추가
+    // 할 일 추가(카드 생성)
     function addTask() {
         var title = document.getElementById('taskTitle').value;
         var status = columnIdForFind;
@@ -110,6 +135,8 @@
         addCard(cardDto,columnIdForFind);
         closeModal();
     }
+
+
 
 </script>
 

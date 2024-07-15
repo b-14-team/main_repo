@@ -3,6 +3,8 @@ let auth = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0ZTE0M2ExNy1jMjI2LTRkMTAtYmNmMi0xODc
 let draggedCard;
 let boardId = 1;
 let columnMap = {}; // 전역변수로 칼럼 맵 정의
+let updateColumnId;
+let updateCardId;
 $(document).ready(function () {
 
     var columnMap = {};
@@ -34,7 +36,7 @@ $(document).ready(function () {
                 // 카드 테두리 색상 설정
                 newCard.style.borderColor = columnData.color || 'black'; // 컬럼 색상으로 테두리 색상 설정
                 newCard.style.borderStyle = 'solid'; // 테두리 스타일 설정
-                newCard.style.borderWidth = '2px'; // 테두리 두께 설정
+                newCard.style.borderWidth = '4px'; // 테두리 두께 설정
 
                 // 수정 버튼 생성
                 var editButton = document.createElement('button');
@@ -42,7 +44,7 @@ $(document).ready(function () {
                 editButton.className = 'edit-button';
                 editButton.onclick = function() {
                     // 수정 로직 추가
-                    editCard(card.id);
+                    showUpdateModal(card);
                 };
 
                 // 삭제 버튼 생성
@@ -170,26 +172,7 @@ $(document).ready(function () {
         });
     }
 
-    function loadAssignees() {
-        $.ajax({
-            url: `http://localhost:8080/boards/${boardId}/assignees`, // 실제 API URL
-            method: 'GET',
-            success: function(response) {
-                const assigneeSelect = $('#taskAssignee');
-                assigneeSelect.empty(); // 기존 옵션 제거
 
-                // 기본 옵션 추가
-                assigneeSelect.append('<option value="">작업자를 선택하세요</option>');
-
-                // 작업자 목록 추가
-                const assignees = response.data; // response.data를 사용해야 함
-                populateAssigneeSelect(assignees);
-            },
-            error: function(xhr) {
-                console.error('Error loading assignees:', xhr);
-            }
-        });
-    }
 
     function populateAssigneeSelect(assignees) {
         var assigneeSelect = document.getElementById('taskAssignee');
@@ -205,7 +188,6 @@ $(document).ready(function () {
 
 
 
-    loadAssignees();
     loadColumns();
 });
 
@@ -283,6 +265,29 @@ function moveCard(cardId, targetColumnId) {
     });
 }
 
+function loadAssignees(selectElementId) {
+    $.ajax({
+        url: `http://localhost:8080/boards/${boardId}/assignees`, // 실제 API URL
+        method: 'GET',
+        success: function(response) {
+            const assigneeSelect = $(`#${selectElementId}`); // 선택자 매개변수
+            assigneeSelect.empty(); // 기존 옵션 제거
+
+            // 기본 옵션 추가
+            assigneeSelect.append('<option value="">작업자를 선택하세요</option>');
+
+            // 작업자 목록 추가
+            const assignees = response.data;
+            assignees.forEach(assignee => {
+                assigneeSelect.append(`<option value="${assignee.assigneeId}">${assignee.nickName}</option>`);
+            });
+        },
+        error: function(xhr) {
+            console.error('Error loading assignees:', xhr);
+        }
+    });
+}
+
 
 // 삭제 모달 표시 함수
 function showDeleteModal(cardId) {
@@ -319,6 +324,84 @@ function deleteCard(cardId) {
         },
     });
 }
+
+//수정부분
+
+// 수정 모달 열기
+function showUpdateModal(card) {
+    // 수정할때 기본값 넣어주기
+    document.getElementById('updateModal').style.display = 'flex';
+    document.querySelector('#updateTitle').value = card.title;
+    document.querySelector('#updateContent').value = card.content;
+    document.querySelector('#updateDueDate').value = card.deadDate;
+
+    loadAssignees('updateAssignee'); // 수정 모달의 작업자 목록 로드
+    updateCardId = card.id;
+
+}
+
+// 할 일 추가(카드 생성)
+// 카드 수정 함수
+function updateAddTask() {
+    var title = document.getElementById('updateTitle').value;
+    var status = columnIdForFind
+    var content = document.getElementById('updateContent').value;
+    var dueDate = document.getElementById('updateDueDate').value;
+    var assignee = document.getElementById('updateAssignee').value;
+
+    if (!title) {
+        alert("제목은 필수 항목입니다.");
+        return;
+    }
+
+    // task 객체 생성
+    var updateTask = {
+        title: title,
+        content: content,
+        deadDate: dueDate ? new Date(dueDate).toISOString() : null,
+        assigneeId: assignee ? parseInt(assignee) : null,
+        status: status
+    };
+
+    // cardDto 객체 생성
+    var updateCardDto = {
+        title: title,
+        content: content,
+        deadDate: dueDate ? new Date(dueDate).toISOString() : null,
+        assigneeId: assignee ? parseInt(assignee) : null,
+        status: status,
+        tasks: [updateTask]
+    };
+
+    updateCard(updateCardId,updateCardDto);
+    closeModal();
+}
+
+// 카드 업데이트 함수
+function updateCard(cardId, cardDto) {
+    $.ajax({
+        type: 'PATCH',
+        url: `http://localhost:8080/cards/${cardId}`,
+        contentType: 'application/json',
+        data: JSON.stringify(cardDto),
+        success: function(response) {
+            alert("카드가 수정되었습니다.");
+            location.reload(); // 페이지 새로 고침
+        },
+        error: function(error) {
+            console.error("수정 오류:", error);
+            alert("카드 수정 중 오류가 발생했습니다.");
+        }
+    });
+}
+
+// 모달 닫기
+function closeUpdateModal() {
+    document.getElementById('updateModal').style.display = 'none';
+}
+
+
+
 
 
 // function updateCardUI(cardId, targetColumnId) {
