@@ -11,9 +11,15 @@ public class HomeController {
         return "login";
     }
 
+
     @GetMapping("/")
     public String index() {
         return "board";
+
+    @GetMapping("/signup")
+    public String signup() {
+        return "signup";
+
     }
 
 }

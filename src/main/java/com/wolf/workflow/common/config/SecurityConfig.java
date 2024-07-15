@@ -108,7 +108,7 @@ public class SecurityConfig {
                 .requestMatchers("/cards/**").permitAll() // 로그인 페이지가 없어서 프론트 임시 허용
                 .requestMatchers("/columns/**").permitAll() // 로그인 페이지가 없어서 프론트 임시 허용
                 .requestMatchers("/boards/**").permitAll()// 로그인 페이지가 없어서 프론트 임시 허용
-                .requestMatchers("/", "/login", "/users/login").permitAll()
+                .requestMatchers("/", "/login", "/signup", "/users/login").permitAll()
                 .anyRequest().authenticated()
         );
 
