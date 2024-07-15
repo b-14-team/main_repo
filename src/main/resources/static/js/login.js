@@ -33,7 +33,7 @@ function login() {
             // console.log("message:" , message);
 
             // 로그인 성공 시 보드 리스트 페이지로 리다이렉트
-            window.location.href = '/board-list';
+            //window.location.href = '/board-list';
         },
         error: function (xhr, status, error) {
             alert('로그인 실패: ' + xhr.responseText || xhr.statusText);
