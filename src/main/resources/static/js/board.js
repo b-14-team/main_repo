@@ -401,6 +401,57 @@ function closeUpdateModal() {
 }
 
 
+//칼럼 생성부분
+function openCreateColumnModal() {
+    const modal = document.getElementById("createColumnModal");
+    modal.style.display = "block"; // 모달 열기
+}
+
+function createColumn() {
+    const columnStatus = document.getElementById('columnStatus').value;
+    const columnColor = document.getElementById('columnColor').value;
+    const maxCards = document.getElementById('maxCards').value;
+
+    if (!columnStatus || !columnColor) {
+        alert("칼럼 명과 색은 필수 항목입니다.");
+        return;
+    }
+
+    if (maxCards < -1) {
+        alert("최솟값은 -1 입니다. , -1은 최대카드를 제한하지 않는 것 입니다.")
+    }
+
+    // 칼럼 데이터 객체
+    const columnData = {
+        columnsStatus: columnStatus,
+        color: columnColor,
+        maxCards: parseInt(maxCards, 10) // 문자열을 정수로 변환
+    };
+
+    // AJAX 요청
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:8080/columns', // 적절한 URL로 변경
+        contentType: 'application/json',
+        data: JSON.stringify(columnData),
+        success: function(response) {
+            alert("칼럼이 성공적으로 생성되었습니다.");
+            closeCreateColumnModal(); // 모달 닫기
+            location.reload(); // 새로 고침하여 업데이트된 내용을 반영
+        },
+        error: function(error) {
+            console.error("칼럼 생성 중 오류:", error);
+            alert("칼럼 생성 중 오류가 발생했습니다.");
+        }
+    });
+}
+
+function closeCreateColumnModal() {
+    const modal = document.getElementById("createColumnModal");
+    modal.style.display = "none"; // 모달 닫기
+}
+
+
 
 
 

@@ -20,7 +20,7 @@
 <div class="header">
     <div>WORK FLOW 프로젝트</div>
     <div class="buttons">
-        <button class="add-button" onclick="addColumn()">칼럼 추가하기</button>
+        <button class="add-button" onclick="openCreateColumnModal()">칼럼 추가하기</button>
         <button class="collab-button">협업 추가하기</button>
     </div>
 </div>
@@ -84,6 +84,35 @@
 </div>
 </div>
 
+<!-- 칼럼 생성 모달 -->
+<div id="createColumnModal" class="create-column-modal">
+    <div class="modal-content">
+        <div class="modal-header">칼럼 생성</div>
+        <div class="modal-body">
+            <label for="columnStatus">칼럼 명 *</label>
+            <input type="text" id="columnStatus" required>
+
+            <label for="columnColor">칼럼 색 *</label>
+            <select id="columnColor" required>
+                <option value="red">빨강</option>
+                <option value="orange">주황</option>
+                <option value="yellow">노랑</option>
+                <option value="green">초록</option>
+                <option value="blue">파랑</option>
+                <option value="navy">남색</option>
+                <option value="purple">보라</option>
+            </select>
+
+            <label for="maxCards">최대 카드 수 *</label>
+            <input type="number" id="maxCards" value="-1" required>
+
+            <div class="modal-footer">
+                <button class="confirm-button" onclick="createColumn()">저장</button>
+                <button class="cancel-button" onclick="closeCreateColumnModal()">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var columnIdForFind;
