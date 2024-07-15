@@ -1,5 +1,5 @@
 
-let auth = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4NDU3YjQzOS05NTBiLTRjNmQtYTVmNy01ODgzZGJjOWYyYmUiLCJzdWIiOiJiMTR1c2VyQGdtYWlsLmNvbSIsImF1dGgiOiJVU0VSIiwiaWF0IjoxNzIwOTkwMTQ1LCJleHAiOjE3MjA5OTczNDUsInRva2VuVHlwZSI6ImFjY2VzcyJ9.D--kFASAVny2A32w3OK29RLLsbCeYyOUj9aSChxNIhA";
+let auth = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0ZTE0M2ExNy1jMjI2LTRkMTAtYmNmMi0xODczYmU4YTcxMGIiLCJzdWIiOiJiMTR1c2VyQGdtYWlsLmNvbSIsImF1dGgiOiJVU0VSIiwiaWF0IjoxNzIwOTk5NjU3LCJleHAiOjE3MjEwMDY4NTcsInRva2VuVHlwZSI6ImFjY2VzcyJ9.l6h_LKhMUvXxPpl0X4eD2aoIQpwHjTiq9AgcWUaYvPs";
 let draggedCard;
 let boardId = 1;
 let columnMap = {}; // 전역변수로 칼럼 맵 정의
@@ -35,6 +35,29 @@ $(document).ready(function () {
                 newCard.style.borderColor = columnData.color || 'black'; // 컬럼 색상으로 테두리 색상 설정
                 newCard.style.borderStyle = 'solid'; // 테두리 스타일 설정
                 newCard.style.borderWidth = '2px'; // 테두리 두께 설정
+
+                // 수정 버튼 생성
+                var editButton = document.createElement('button');
+                editButton.textContent = '수정';
+                editButton.className = 'edit-button';
+                editButton.onclick = function() {
+                    // 수정 로직 추가
+                    editCard(card.id);
+                };
+
+                // 삭제 버튼 생성
+                var deleteButton = document.createElement('button');
+                deleteButton.textContent = '삭제';
+                deleteButton.className = 'delete-button';
+                deleteButton.onclick = function() {
+                    // 삭제 로직 추가
+                    deleteCard(card.id);
+                };
+
+                // 버튼들을 카드에 추가
+                newCard.appendChild(editButton);
+                newCard.appendChild(deleteButton);
+
                 // 드래그 가능한 카드 만들기
                 makeDraggable(newCard);
                 newColumn.appendChild(newCard);
@@ -200,7 +223,7 @@ function addCard(cardDto, columnId) {
         success: function (response) {
             alert("생성 완료");
             addCardToColumn(response); // 응답 받은 카드로 칼럼에 추가
-            // location.reload();
+            location.reload();
         },
         error: function (error) {
             console.error("Error:", error);

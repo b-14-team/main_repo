@@ -10,19 +10,26 @@ body {
 .column {
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 200px;
+    width: auto; /* 가로 크기 자동 조정 */
     padding: 10px;
     background-color: #f4f4f4;
+    display: flex; /* 플렉스 박스 사용 */
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    word-wrap: break-word; /* 내용이 길 경우 자동 줄바꿈 */
+    min-width : 250px;
 }
 .column-header {
     font-weight: bold;
     margin-bottom: 10px;
 }
 .card {
-    border: 2px solid#cccccc;
+    position: relative;
+    border: 2px solid #cccccc;
     padding: 10px;
     margin: 5px;
     border-radius: 5px;
+    display: inline-block; /* 내용물에 맞게 자동으로 크기 조정 */
+    width: 200px; /* 원하는 너비 설정 (선택 사항) */
     /* 기타 스타일... */
 }
 .button-container {
@@ -104,4 +111,18 @@ body {
 .confirm-button {
     background-color: #4CAF50;
     color: white;
+}
+
+.edit-button, .delete-button {
+    position: absolute;
+    bottom: 10px; /* 카드의 하단 */
+    margin-left: 1px; /* 버튼 간격 */
+}
+
+.edit-button {
+    right: 50px; /* 수정 버튼 위치 */
+}
+
+.delete-button {
+    right: 5px; /* 삭제 버튼 위치 */
 }
