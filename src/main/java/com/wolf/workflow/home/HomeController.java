@@ -15,11 +15,12 @@ public class HomeController {
     @GetMapping("/")
     public String index() {
         return "board";
+    }
 
     @GetMapping("/signup")
     public String signup() {
         return "signup";
 
     }
-
 }
+
