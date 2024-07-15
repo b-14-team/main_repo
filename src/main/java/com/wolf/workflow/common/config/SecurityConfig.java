@@ -19,7 +19,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -56,8 +55,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
             throws Exception {
@@ -90,6 +87,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
@@ -110,7 +108,7 @@ public class SecurityConfig {
                 .requestMatchers("/cards/**").permitAll() // 로그인 페이지가 없어서 프론트 임시 허용
                 .requestMatchers("/columns/**").permitAll() // 로그인 페이지가 없어서 프론트 임시 허용
                 .requestMatchers("/boards/**").permitAll()// 로그인 페이지가 없어서 프론트 임시 허용
-                .requestMatchers("/").permitAll()
+                .requestMatchers("/", "/login", "/users/login").permitAll()
                 .anyRequest().authenticated()
         );
 

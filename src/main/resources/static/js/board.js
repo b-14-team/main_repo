@@ -1,5 +1,5 @@
 
-let auth = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0ZTE0M2ExNy1jMjI2LTRkMTAtYmNmMi0xODczYmU4YTcxMGIiLCJzdWIiOiJiMTR1c2VyQGdtYWlsLmNvbSIsImF1dGgiOiJVU0VSIiwiaWF0IjoxNzIwOTk5NjU3LCJleHAiOjE3MjEwMDY4NTcsInRva2VuVHlwZSI6ImFjY2VzcyJ9.l6h_LKhMUvXxPpl0X4eD2aoIQpwHjTiq9AgcWUaYvPs";
+let auth = "";
 let draggedCard;
 let boardId = 1;
 let columnMap = {}; // 전역변수로 칼럼 맵 정의
@@ -431,7 +431,7 @@ function createColumn() {
     // AJAX 요청
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:8080/columns', // 적절한 URL로 변경
+        url: `http://localhost:8080/columns/${boardId}`, // 적절한 URL로 변경
         contentType: 'application/json',
         data: JSON.stringify(columnData),
         success: function(response) {
@@ -450,6 +450,8 @@ function closeCreateColumnModal() {
     const modal = document.getElementById("createColumnModal");
     modal.style.display = "none"; // 모달 닫기
 }
+
+
 
 
 

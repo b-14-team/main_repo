@@ -10,11 +10,13 @@ import com.wolf.workflow.column.dto.response.ColumnsResponseDto;
 import com.wolf.workflow.column.entity.Columns;
 import com.wolf.workflow.column.service.ColumnService;
 import com.wolf.workflow.common.globalresponse.ApiResponse;
+import com.wolf.workflow.common.security.AuthenticationUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,11 +42,11 @@ public class ColumnController {
     }).toList();
   }
 
-  @PostMapping
-  public ResponseEntity<ApiResponse<ColumnResponseDto>> createColumn(@RequestParam Long boardId,
-      @RequestParam Long userId,
-      @Valid @RequestBody ColumnRequestDto requestDto) {
-    ColumnResponseDto responseDto = columnService.createColumn(boardId, userId, requestDto);
+  @PostMapping("/{boardId}")
+  public ResponseEntity<ApiResponse<ColumnResponseDto>> createColumn(@PathVariable Long boardId,
+                                                                     @AuthenticationPrincipal AuthenticationUser authenticationUser,
+                                                                     @Valid @RequestBody ColumnRequestDto requestDto) {
+    ColumnResponseDto responseDto = columnService.createColumn(boardId, authenticationUser.getUser().getId(), requestDto);
 
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(ApiResponse.of(responseDto));
