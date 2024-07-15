@@ -31,25 +31,16 @@ public class CardAdapter {
 
     public List<Card> getAllCards(Pageable pageable) {
         Page<Card> cardList = cardRepository.findAll(pageable);
-        if (cardList.isEmpty()) {
-            throw new NotFoundCardListException(MessageUtil.getMessage("not.find.cardList"));
-        }
         return cardList.getContent();
     }
 
     public List<Card> getCardsByAssigneeId(Long assigneeId) {
         List<Card> cardList = cardRepository.findByAssigneeId(assigneeId);
-        if (cardList.isEmpty()) {
-            throw new NotFoundCardListException(MessageUtil.getMessage("not.find.cardList"));
-        }
         return cardList;
     }
 
     public List<Card> getCardsByColumnId(Long columnId) {
         List<Card> cardList = cardRepository.findByColumnsId(columnId);
-        if (cardList.isEmpty()) {
-            throw new NotFoundCardListException(MessageUtil.getMessage("not.find.cardList"));
-        }
         return cardList;
     }
 

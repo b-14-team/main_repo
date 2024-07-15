@@ -1,0 +1,53 @@
+### USER 로그인
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "email":"b14user@gmail.com",
+  "password":"Passw0rd!"
+}
+
+> {% client.global.set("access_token", response.headers.valueOf("Authorization")); %}
+
+### 카드 생성1
+POST http://localhost:8080/cards/1
+Authorization: {{access_token}}
+Content-Type: application/json
+
+{
+  "title": "카드제목1",
+  "content": "첫 번째 내용",
+  "assigneeId": 1
+}
+
+### 카드 생성2
+POST http://localhost:8080/cards/1
+Authorization: {{access_token}}
+Content-Type: application/json
+
+{
+  "title": "카드제목2",
+  "content": "두 번째 내용",
+  "assigneeId": 1
+}
+### 카드 생성3
+POST http://localhost:8080/cards/1
+Authorization: {{access_token}}
+Content-Type: application/json
+
+{
+"title": "카드제목3",
+"content": "세 번째 내용",
+"assigneeId": 1
+}
+### 카드 생성4
+POST http://localhost:8080/cards/1
+Authorization: {{access_token}}
+Content-Type: application/json
+
+{
+"title": "카드제목4",
+"content": "네 번째 내용",
+"assigneeId": 1
+}
+

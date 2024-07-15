@@ -5,6 +5,8 @@ import com.wolf.workflow.column.entity.Columns;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,7 +17,7 @@ public class CardGetAllResponseDto {
     private Long id;
     private String title;
     private String content;
-    private LocalDateTime deadDate;
+    private LocalDate deadDate;
     private Long assigneeId;
     private String assignee;
     private String cardStatus;

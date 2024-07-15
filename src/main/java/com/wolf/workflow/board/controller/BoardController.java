@@ -3,6 +3,7 @@ package com.wolf.workflow.board.controller;
 import com.wolf.workflow.board.adapter.BoardUserAdapter;
 import com.wolf.workflow.board.dto.request.BoardRequestDto;
 import com.wolf.workflow.board.dto.request.BoardUpdateRequestDto;
+import com.wolf.workflow.board.dto.response.AssigneeResponseDto;
 import com.wolf.workflow.board.dto.response.BoardGetResponseDto;
 import com.wolf.workflow.board.dto.response.BoardResponseDto;
 import com.wolf.workflow.board.dto.response.BoardUpdateResponseDto;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -158,5 +161,21 @@ public class BoardController {
 
     return ResponseEntity.status(HttpStatus.OK)
         .body(ApiResponse.of(message));
+  }
+
+  /**
+   * 보드 사용자 리스트 찾기
+   *
+   * @param boardId
+   * @return
+   */
+  @ResponseBody
+  @GetMapping("/{boardId}/assignees")
+  public ResponseEntity<ApiResponse<List<AssigneeResponseDto>>> getAssignees(@PathVariable Long boardId) {
+
+    List<AssigneeResponseDto> assigneeResponseDtoList = boardService.getAssigneesByBoardId(boardId);
+
+    return ResponseEntity.status(HttpStatus.OK)
+            .body(ApiResponse.of(assigneeResponseDtoList));
   }
 }

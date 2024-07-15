@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,14 +30,14 @@ public class Card extends Timestamped {
 
     private Long assigneeId;
 
-    private LocalDateTime deadDate;
+    private LocalDate deadDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "columns_id",nullable = false)
     private Columns columns;
 
     @Builder
-    private Card(String title, String content, Long assigneeId, LocalDateTime deadDate,Columns columns) {
+    private Card(String title, String content, Long assigneeId, LocalDate deadDate,Columns columns) {
         this.title = title;
         this.content = content;
         this.assigneeId = assigneeId;
@@ -44,12 +45,17 @@ public class Card extends Timestamped {
         this.columns = columns;
     }
 
-    public void updateCard(String title, String content, Long assigneeId, LocalDateTime deadDate) {
+    public void updateCard(String title, String content, Long assigneeId, LocalDate deadDate) {
         this.title = title;
         this.content = content;
         this.assigneeId = assigneeId;
         this.deadDate = deadDate;
     }
+
+    public void updateMoveCard(Columns columns) {
+        this.columns = columns;
+    }
+
 
     public static Card createCard(CardCreateRequestDto requestDto, Columns columns) {
         return Card.builder()

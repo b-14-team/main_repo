@@ -8,10 +8,12 @@ import com.wolf.workflow.column.dto.response.ColumnResponseDto;
 import com.wolf.workflow.column.entity.Columns;
 import com.wolf.workflow.common.exception.DuplicatedColumnException;
 import com.wolf.workflow.common.exception.NotFoundColumnException;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +43,7 @@ public class ColumnService {
 
     return ColumnResponseDto.of(columns);
   }
+
 
   /**
    * 컬럼 업데이트
@@ -77,6 +80,10 @@ public class ColumnService {
     Columns columns = columnAdapter.findColumnsById(columnId);
 
     columnAdapter.deleteColumn(columns);
+  }
+
+  public List<Columns> getAllColumns() {
+    return columnAdapter.findAll();
   }
 
   /**

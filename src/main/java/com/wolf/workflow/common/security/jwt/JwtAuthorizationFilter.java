@@ -1,4 +1,3 @@
-
 package com.wolf.workflow.common.security.jwt;
 
 import com.wolf.workflow.common.exceptionstatus.CommonErrorCode;
@@ -41,8 +40,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String accessTokenValue = jwtUtil.getAccessTokenFromHeader(req);
         log.info("현재주소 : "+req.getRequestURL().toString());
-        // 인가 요청시 확인 없이 넘어가야하는 주소들 추가
-
+                // 인가 요청시 확인 없이 넘어가야하는 주소들 추가
         log.info("access token 검증");
         if (StringUtils.hasText(accessTokenValue)
                 && jwtUtil.validateToken(req, accessTokenValue)
@@ -55,24 +53,24 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         ) {
             log.info("refresh token 검증");
 
-            String email = jwtUtil.getUserInfoFromToken(accessTokenValue).getSubject();
-            User findUser = userAdapter.getUserByEmail(email);
+                String email = jwtUtil.getUserInfoFromToken(accessTokenValue).getSubject();
+                User findUser = userAdapter.getUserByEmail(email);
 
-            if (findUser.getRefreshToken() != null) {
-                if (isValidateUserEmail(email, findUser)) {
+                if (findUser.getRefreshToken() != null) {
+                    if (isValidateUserEmail(email, findUser)) {
 
-                    log.info("Token 인증 완료");
-                    Claims info = jwtUtil.getUserInfoFromToken(accessTokenValue);
-                    setAuthentication(info.getSubject());
+                        log.info("Token 인증 완료");
+                        Claims info = jwtUtil.getUserInfoFromToken(accessTokenValue);
+                        setAuthentication(info.getSubject());
+                    }
+                } else {
+                    log.error("유효하지 않는 Refersh Token");
+                    req.setAttribute("exception",
+                            new CustomSecurityException(
+                                    CommonErrorCode.BAD_REQUEST,
+                                    MessageUtil.getMessage("invalid.jwt.signature")));
                 }
-            } else {
-                log.error("유효하지 않는 Refersh Token");
-                req.setAttribute("exception",
-                        new CustomSecurityException(
-                                CommonErrorCode.BAD_REQUEST,
-                                MessageUtil.getMessage("invalid.jwt.signature")));
             }
-        }
         filterChain.doFilter(req, res);
     }
 
