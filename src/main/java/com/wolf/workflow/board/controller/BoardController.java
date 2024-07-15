@@ -3,18 +3,19 @@ package com.wolf.workflow.board.controller;
 import com.wolf.workflow.board.adapter.BoardUserAdapter;
 import com.wolf.workflow.board.dto.request.BoardRequestDto;
 import com.wolf.workflow.board.dto.request.BoardUpdateRequestDto;
-import com.wolf.workflow.board.dto.response.AssigneeResponseDto;
 import com.wolf.workflow.board.dto.response.BoardGetResponseDto;
 import com.wolf.workflow.board.dto.response.BoardResponseDto;
 import com.wolf.workflow.board.dto.response.BoardUpdateResponseDto;
 import com.wolf.workflow.board.service.BoardService;
 import com.wolf.workflow.common.globalresponse.ApiResponse;
+import com.wolf.workflow.common.security.AuthenticationUser;
 import com.wolf.workflow.common.util.MessageUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,13 +43,13 @@ public class BoardController {
    */
   @ResponseBody
   @PostMapping
-  public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
-      @Valid @RequestBody BoardRequestDto requestDto) {
+  public ResponseEntity<BoardResponseDto> createBoard(
+      AuthenticationUser user,
+      @RequestBody BoardRequestDto requestDto) {
     BoardResponseDto boardResponseDto = boardService.createBoard(
-        requestDto,
-        requestDto.getUserId());
+        user, requestDto);
     return ResponseEntity.status(HttpStatus.OK)
-        .body(ApiResponse.of(boardResponseDto));
+        .body(ApiResponse.of(boardResponseDto).getData());
   }
 
   /**
@@ -63,12 +62,10 @@ public class BoardController {
   @ResponseBody
   @PatchMapping("/{boardId}")
   public ResponseEntity<ApiResponse<BoardUpdateResponseDto>> updateBoard(
+      @AuthenticationPrincipal AuthenticationUser user,
       @PathVariable Long boardId,
       @Valid @RequestBody BoardUpdateRequestDto requestDto) {
-    BoardUpdateResponseDto responseDto = boardService.updateBoard(
-        requestDto,
-        boardId,
-        requestDto.getUserId());
+    BoardUpdateResponseDto responseDto = boardService.updateBoard(user,requestDto, boardId);
     return ResponseEntity.status(HttpStatus.OK)
         .body(ApiResponse.of(responseDto));
   }
@@ -81,8 +78,10 @@ public class BoardController {
    */
   @ResponseBody
   @DeleteMapping("/{boardId}")
-  public ResponseEntity<ApiResponse<String>> deleteBoard(@PathVariable Long boardId) {
-    boardService.deleteBoard(boardId);
+  public ResponseEntity<ApiResponse<String>> deleteBoard(
+      AuthenticationUser user,
+      @PathVariable Long boardId) {
+    boardService.deleteBoard(user,boardId);
     return ResponseEntity.status(HttpStatus.OK)
         .body(ApiResponse.of("보드가 삭제되었습니다"));
   }
@@ -133,10 +132,10 @@ public class BoardController {
   @ResponseBody
   @PostMapping("/{boardId}/invite/{userId}")
   public ResponseEntity<ApiResponse<String>> inviteUserToBoard(
+      @AuthenticationPrincipal AuthenticationUser user,
       @PathVariable Long boardId,
-      @PathVariable Long userId
-  ) {
-    boardService.inviteUserToBoard(boardId, userId);
+      @PathVariable Long userId) {
+    boardService.inviteUserToBoard(user, boardId, userId);
 
     return ResponseEntity.status(HttpStatus.OK)
         .body(ApiResponse.of("사용자를 초대하였습니다."));
@@ -153,29 +152,14 @@ public class BoardController {
   @ResponseBody
   @PostMapping("/{boardId}/invite/{userId}/status")
   public ResponseEntity<ApiResponse<String>> approveInvitation(
+      @AuthenticationPrincipal AuthenticationUser user,
       @PathVariable Long boardId,
       @PathVariable Long userId,
       @RequestParam boolean approve) {
-    boardService.approveInvitation(boardId, userId, approve);
+    boardService.approveInvitation( boardId, userId, approve);
     String message = approve ? "초대 승인되었습니다." : "초대 거절되었습니다.";
 
     return ResponseEntity.status(HttpStatus.OK)
         .body(ApiResponse.of(message));
-  }
-
-  /**
-   * 보드 사용자 리스트 찾기
-   *
-   * @param boardId
-   * @return
-   */
-  @ResponseBody
-  @GetMapping("/{boardId}/assignees")
-  public ResponseEntity<ApiResponse<List<AssigneeResponseDto>>> getAssignees(@PathVariable Long boardId) {
-
-    List<AssigneeResponseDto> assigneeResponseDtoList = boardService.getAssigneesByBoardId(boardId);
-
-    return ResponseEntity.status(HttpStatus.OK)
-            .body(ApiResponse.of(assigneeResponseDtoList));
   }
 }

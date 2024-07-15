@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -57,13 +58,12 @@ public class BoardUser {
         this.invitationStatus = invitationStatus;
     }
     public static BoardUser createBoardUser(Board board, User user, Participation participation,
-        BoardUserRole boardUserRole, InvitationStatus invitationStatus) {
+        BoardUserRole boardUserRole) {
         return BoardUser.builder()
             .board(board)
             .user(user)
             .participation(participation)
             .boardUserRole(boardUserRole)
-            .invitationStatus(invitationStatus)
             .build();
     }
 
