@@ -1,3 +1,4 @@
+
 package com.wolf.workflow.common.security.jwt;
 
 import com.wolf.workflow.common.exceptionstatus.CommonErrorCode;
@@ -29,7 +30,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final UserAdapter userAdapter;
 
     public JwtAuthorizationFilter(JwtUtil jwtUtil,
-            AuthenticationUserService authenticationUserService, UserAdapter userAdapter) {
+                                  AuthenticationUserService authenticationUserService, UserAdapter userAdapter) {
         this.jwtUtil = jwtUtil;
         this.authenticationUserService = authenticationUserService;
         this.userAdapter = userAdapter;
@@ -37,11 +38,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
-            FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain) throws ServletException, IOException {
         String accessTokenValue = jwtUtil.getAccessTokenFromHeader(req);
+        log.info("현재주소 : "+req.getRequestURL().toString());
+        // 인가 요청시 확인 없이 넘어가야하는 주소들 추가
 
         log.info("access token 검증");
-        if (StringUtils.hasText(accessTokenValue) && jwtUtil.validateToken(req, accessTokenValue)) {
+        if (StringUtils.hasText(accessTokenValue)
+                && jwtUtil.validateToken(req, accessTokenValue)
+                && !req.getRequestURL().toString().equals("http://localhost:8080/")
+                && !req.getRequestURL().toString().equals("http://localhost:8080/login")
+                && !req.getRequestURL().toString().contains("/css/")
+                && !req.getRequestURL().toString().contains("/js/")
+                && !req.getRequestURL().toString().contains("/favicon.ico")
+        ) {
             log.info("refresh token 검증");
 
             String email = jwtUtil.getUserInfoFromToken(accessTokenValue).getSubject();
