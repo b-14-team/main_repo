@@ -1,14 +1,28 @@
 
 let auth = "";
+let refreshToken = "";
 let draggedCard;
 let boardId = 1;
 let columnMap = {}; // 전역변수로 칼럼 맵 정의
 let updateColumnId;
 let updateCardId;
+
 $(document).ready(function () {
+    auth = localStorage.getItem('accessToken');
+    refreshToken = localStorage.getItem('refreshToken');
+    console.log("엑세스 토큰: " + auth)
+    console.log("리프레시 토큰: " + refreshToken)
 
-    var columnMap = {};
-
+    if (auth !== undefined && auth !== '') {
+        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+            jqXHR.setRequestHeader('Authorization', auth);
+            jqXHR.setRequestHeader('Authorization-refresh',refreshToken);
+        });
+    } else {
+        window.location.href = host + '/api/user/login';
+        alert("로그인 후 이용해 주세요");
+        return;
+    }
 
     function addColumnToBoard(columnData) {
         var board = document.getElementById('board');
@@ -93,9 +107,6 @@ $(document).ready(function () {
         $.ajax({
             type: 'GET',
             url: 'http://localhost:8080/cards',
-            headers: {
-                'Authorization': 'Bearer ' + auth
-            },
             success: function (response) {
                 if (Array.isArray(response)) {
                     response.forEach(card => {
@@ -116,9 +127,6 @@ $(document).ready(function () {
         $.ajax({
             type: 'GET',
             url: 'http://localhost:8080/columns',
-            headers: {
-                'Authorization': 'Bearer ' + auth
-            },
             success: function (response) {
                 console.log("Columns response:", response); // 응답 확인
                 if (Array.isArray(response)) {
@@ -248,10 +256,6 @@ function moveCard(cardId, targetColumnId) {
     $.ajax({
         type: 'PATCH',
         url: `http://localhost:8080/cards/${cardId}/move/${targetColumnId}`, // 카드 ID에 대한 PATCH 요청
-        headers: {
-            'Authorization': 'Bearer ' + auth,
-            'Content-Type': 'application/json'
-        },
         data: JSON.stringify({ status: targetColumnId }), // 새 상태(칼럼 ID)를 JSON으로 전달
         success: function (response) {
             console.log(`Card ${cardId} moved to column ${targetColumnId}`);
@@ -311,9 +315,6 @@ function deleteCard(cardId) {
     $.ajax({
         type: 'DELETE',
         url: `http://localhost:8080/cards/${cardId}`,
-        headers: {
-            'Authorization': 'Bearer ' + auth
-        },
         success: function (response) {
             alert("카드가 삭제되었습니다.");
             location.reload();

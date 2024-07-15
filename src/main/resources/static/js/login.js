@@ -24,6 +24,10 @@ function login() {
             const accessToken = jqXHR.getResponseHeader('Authorization');
             const refreshToken = jqXHR.getResponseHeader('Authorization-Refresh');
 
+            // 토큰을 localStorage에 저장
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
+
             // 바디
             const message = response.message;
 
@@ -33,7 +37,8 @@ function login() {
             // console.log("message:" , message);
 
             // 로그인 성공 시 보드 리스트 페이지로 리다이렉트
-            //window.location.href = '/board-list';
+            // window.location.href = '/board-list';
+            window.location.href = '/';
         },
         error: function (xhr, status, error) {
             alert('로그인 실패: ' + xhr.responseText || xhr.statusText);

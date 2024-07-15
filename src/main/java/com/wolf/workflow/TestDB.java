@@ -45,12 +45,22 @@ public class TestDB {
             User consumer = User.builder()
                     .email("b14user@gmail.com")
                     .password(passwordEncoder.encode("Passw0rd!"))
-                    .nickName("닉네임이요~~")
+                    .nickName("테스트용 닉네임")
                     .description("한줄 소개")
                     .userStatus(UserStatus.ENABLE)
                     .userRole(UserRole.USER)
                     .build();
             save(consumer);
+
+            User consumer2 = User.builder()
+                    .email("winner7789@gmail.com")
+                    .password(passwordEncoder.encode("fbwjdrms1234!"))
+                    .nickName("류정근")
+                    .description("류정근 입니당")
+                    .userStatus(UserStatus.ENABLE)
+                    .userRole(UserRole.USER)
+                    .build();
+            save(consumer2);
 
             Board board = Board.builder()
                     .board_name("테스트용 보드")
