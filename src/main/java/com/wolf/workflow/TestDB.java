@@ -53,12 +53,12 @@ public class TestDB {
             save(consumer);
 
             User consumer2 = User.builder()
-                    .email("winner7789@gmail.com")
-                    .password(passwordEncoder.encode("fbwjdrms1234!"))
-                    .nickName("류정근")
-                    .description("류정근 입니당")
+                    .email("test@gmail.com")
+                    .password(passwordEncoder.encode("test1234!@"))
+                    .nickName("테스트유저")
+                    .description("B14조 입니다.")
                     .userStatus(UserStatus.ENABLE)
-                    .userRole(UserRole.USER)
+                    .userRole(UserRole.ADMIN)
                     .build();
             save(consumer2);
 
@@ -76,6 +76,17 @@ public class TestDB {
                     .participation(Participation.ENABLE)
                     .build();
             save(boardUser);
+
+            BoardUser boardUser2 = BoardUser.builder()
+                    .board(board)
+                    .user(consumer2)
+                    .boardUserRole(BoardUserRole.GENERAL_MANAGER)
+                    .invitationStatus(InvitationStatus.ACCEPTED)
+                    .participation(Participation.ENABLE)
+                    .build();
+            save(boardUser2);
+
+
         }
 
 
