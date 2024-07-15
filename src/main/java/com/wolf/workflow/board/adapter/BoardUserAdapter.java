@@ -21,9 +21,6 @@ public class BoardUserAdapter {
                new NotFoundBoardUserException(MessageUtil.getMessage("not.find.boardUser"))
        );
     }
-    public BoardUser getBoardUser(Long boardId, Long userId) {
-     return boardUserRepository.findByBoardIdAndUserId(boardId, userId);
-  }
 
     public BoardUser saveBoardUser(BoardUser boardUser) {
       return boardUserRepository.save(boardUser);
@@ -45,6 +42,11 @@ public class BoardUserAdapter {
     public List<BoardUser> getBoardUsersByIds(List<Long> ids) {
         return boardUserRepository.findAllByIdIn(ids);
     }
+
+  private BoardUser getBoardUser(Long boardId, Long userId) {
+    return boardUserRepository.findByBoardIdAndUserId(boardId, userId);
+  }
+
 
     public List<BoardUser> getBoardUsersByBoardId(Long boardId) {
         return boardUserRepository.findByBoardId(boardId);
