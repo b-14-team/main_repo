@@ -4,13 +4,10 @@ import com.wolf.workflow.board.entity.Board;
 import com.wolf.workflow.card.entity.Card;
 import com.wolf.workflow.common.Timestamped;
 import jakarta.persistence.*;
-import java.util.LinkedList;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,44 +17,53 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Columns extends Timestamped {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "columns_id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "columns_id")
+  private Long id;
 
-    @Column(name = "column_status", nullable = false)
-    private String columnsStatus;
+  @Column(name = "column_status", nullable = false)
+  private String columnsStatus;
 
-    @Column(name = "number_of_card", nullable = false)
-    private Long numberOfCard = 0L;
+  @Column(name = "move", nullable = false)
+  private int move;
 
-    @Column(name = "max_card", nullable = false)
-    private Long maxCards = -1L;
+  @Column(name = "number_of_card", nullable = false)
+  private Long numberOfCard = 0L;
 
-    @Column(nullable = false)
-    private String color;
+  @Column(name = "max_card", nullable = false)
+  private Long maxCards = -1L;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Board board;
+  @Column(nullable = false)
+  private String color;
 
-    @OneToMany(mappedBy = "columns")
-    private List<Card> cardList = new ArrayList<>();
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Board board;
 
-    @Builder
-    private Columns(String columnsStatus, String color) {
-        this.columnsStatus = columnsStatus;
-        this.color = color;
-    }
+  @OneToMany(mappedBy = "columns")
+  private List<Card> cardList = new ArrayList<>();
 
-    public static Columns createColumn(String columnsStatus, String color) {
-        return Columns.builder()
-            .columnsStatus(columnsStatus)
-            .color(color)
-            .build();
-    }
+  @Builder
+  private Columns(String columnsStatus, String color, int move) {
+    this.columnsStatus = columnsStatus;
+    this.color = color;
+    this.move = move;
+  }
 
-    public void updateColumn(String columnsStatus, String color) {
-        this.columnsStatus = columnsStatus;
-        this.color = color;
-    }
+  public static Columns createColumn(String columnsStatus, String color, int move) {
+    return Columns.builder()
+        .columnsStatus(columnsStatus)
+        .color(color)
+        .move(move)
+        .build();
+  }
+
+  public void updateColumn(String columnsStatus, String color) {
+    this.columnsStatus = columnsStatus;
+    this.color = color;
+  }
+
+  public void columnMove(int move) {
+    this.move = move;
+  }
 }
