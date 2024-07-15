@@ -9,5 +9,5 @@ public class BoardRequestDto {
   private String board_name;
   @NotBlank(message = "한 줄 설명은 필수입니다")
   private String content;
-  private Long userId;
+
 }
