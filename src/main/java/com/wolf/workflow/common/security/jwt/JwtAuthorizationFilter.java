@@ -48,6 +48,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 && jwtUtil.validateToken(req, accessTokenValue)
                 && !req.getRequestURL().toString().equals("http://localhost:8080/")
                 && !req.getRequestURL().toString().equals("http://localhost:8080/login")
+                && !req.getRequestURL().toString().equals("http://localhost:8080/signup")
                 && !req.getRequestURL().toString().contains("/css/")
                 && !req.getRequestURL().toString().contains("/js/")
                 && !req.getRequestURL().toString().contains("/favicon.ico")
