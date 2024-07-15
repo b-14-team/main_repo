@@ -3,6 +3,7 @@ package com.wolf.workflow.common.exceptionhandler;
 import com.wolf.workflow.common.exception.global.GlobalDuplicatedException;
 import com.wolf.workflow.common.exception.global.GlobalMismatchException;
 import com.wolf.workflow.common.exception.global.GlobalNotFoundException;
+import com.wolf.workflow.common.exception.global.GlobalStatusException;
 import com.wolf.workflow.common.exceptionstatus.CommonErrorCode;
 import com.wolf.workflow.common.globalresponse.ErrorResponse;
 import java.util.HashMap;
@@ -52,6 +53,13 @@ public class ApiExceptionHandler {
     @ExceptionHandler(GlobalNotFoundException.class)
     public ResponseEntity<ErrorResponse> globalNotFoundException(GlobalNotFoundException e) {
         log.error("GlobalNotFoundException 발생");
+
+        return getResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(GlobalStatusException.class)
+    public ResponseEntity<ErrorResponse> globalStatusException(GlobalStatusException e) {
+        log.error("GlobalStatusException 발생");
 
         return getResponse(e.getMessage());
     }
