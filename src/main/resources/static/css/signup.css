@@ -1,0 +1,44 @@
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.container {
+    width: 300px;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin: 50px auto 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group-big {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.form-control-big {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    height: 100px; /* 높이를 높여서 더 많은 내용을 담을 수 있도록 함 */
+    resize: vertical; /* 사용자가 높이를 조절할 수 있도록 함 */
+}
+
+.btn {
+    width: 100%;
+}
