@@ -113,6 +113,8 @@ body {
     color: white;
 }
 
+
+/*삭제 수정 버튼 생성*/
 .edit-button, .delete-button {
     position: absolute;
     bottom: 10px; /* 카드의 하단 */
@@ -126,3 +128,65 @@ body {
 .delete-button {
     right: 5px; /* 삭제 버튼 위치 */
 }
+
+/* 모달 기본 스타일 */
+.delete-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 모달 내용 스타일 */
+.delete-modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* 취소 버튼 스타일 */
+.cancel-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel-button:hover,
+.cancel-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 삭제 버튼 스타일 */
+.confirm-delete-button {
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 15px 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.confirm-delete-button:hover {
+    background-color: #cc0000;
+}
+
+
+

@@ -51,7 +51,7 @@ $(document).ready(function () {
                 deleteButton.className = 'delete-button';
                 deleteButton.onclick = function() {
                     // 삭제 로직 추가
-                    deleteCard(card.id);
+                    showDeleteModal(card.id);
                 };
 
                 // 버튼들을 카드에 추가
@@ -141,6 +141,7 @@ $(document).ready(function () {
         });
     }
 
+    //드레그 가능
     function makeColumnDraggable(column) {
         column.setAttribute('draggable', true);
 
@@ -153,7 +154,7 @@ $(document).ready(function () {
             column.classList.remove('dragging');
         });
     }
-
+    //드레그 가능
     function makeDraggable(card) {
         card.setAttribute('draggable', true);
 
@@ -279,6 +280,43 @@ function moveCard(cardId, targetColumnId) {
         //     console.error("Error moving card:", error);
         //     alert("카드를 이동하는 중 오류가 발생했습니다.");
         // }
+    });
+}
+
+
+// 삭제 모달 표시 함수
+function showDeleteModal(cardId) {
+    const modal = document.getElementById("deleteModal");
+    modal.style.display = "block";
+
+    const confirmDelete = document.getElementById("confirmDelete");
+    confirmDelete.onclick = function() {
+        deleteCard(cardId);
+        modal.style.display = "none";
+    }
+}
+
+// 모달 닫기 함수
+function closeDeleteModal() {
+    const modal = document.getElementById("deleteModal");
+    modal.style.display = "none";
+}
+
+function deleteCard(cardId) {
+    $.ajax({
+        type: 'DELETE',
+        url: `http://localhost:8080/cards/${cardId}`,
+        headers: {
+            'Authorization': 'Bearer ' + auth
+        },
+        success: function (response) {
+            alert("카드가 삭제되었습니다.");
+            location.reload();
+        },
+        error: function (error) {
+            console.error("Error deleting card:", error);
+            alert("카드를 삭제하는 중 오류가 발생했습니다.");
+        },
     });
 }
 

@@ -50,6 +50,17 @@
     </div>
 </div>
 
+<!-- 삭제 모달 -->
+<div id="deleteModal" class="delete-modal">
+    <div class="delete-modal-content">
+        <span class="cancel-button" onclick="closeDeleteModal()">&times;</span>
+        <p>데이터가 전부 사라집니다. 정말 삭제하시겠습니까?</p>
+        <button id="confirmDelete" class="confirm-delete-button">삭제</button>
+        <button class="cancel-button" onclick="closeDeleteModal()">취소</button>
+    </div>
+</div>
+
+
 <script>
     var columnIdForFind;
 
