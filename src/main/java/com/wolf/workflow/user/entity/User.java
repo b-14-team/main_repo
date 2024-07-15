@@ -3,7 +3,7 @@ package com.wolf.workflow.user.entity;
 import com.wolf.workflow.board.entity.BoardUser;
 import com.wolf.workflow.comment.entity.Comment;
 import com.wolf.workflow.common.Timestamped;
-import com.wolf.workflow.user.dto.request.UserSignupRequestDto;
+import com.wolf.workflow.user.service.dto.SignupUserDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -55,7 +55,7 @@ public class User extends Timestamped {
     @Builder
     public User(String email, String password, String nickName, String description,
             String refreshToken, List<Comment> commentList, List<BoardUser> boardUserList,
-            UserRole userRole, UserStatus userStatus) {
+            UserStatus userStatus, UserRole userRole) {
         this.email = email;
         this.password = password;
         this.nickName = nickName;
@@ -63,17 +63,18 @@ public class User extends Timestamped {
         this.refreshToken = refreshToken;
         this.commentList = commentList;
         this.boardUserList = boardUserList;
-        this.userRole = userRole;
         this.userStatus = userStatus;
+        this.userRole = userRole;
     }
 
-    public static User createUser(UserSignupRequestDto requestDto) {
+    public static User createUser(SignupUserDto requestDto) {
         return User.builder()
                 .email(requestDto.getEmail())
                 .password(requestDto.getPassword())
                 .nickName(requestDto.getNickName())
                 .description(requestDto.getDescription())
                 .userStatus(UserStatus.ENABLE)
+                .userRole(UserRole.USER)
                 .build();
     }
 
