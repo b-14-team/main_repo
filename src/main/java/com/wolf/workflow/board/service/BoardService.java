@@ -127,7 +127,7 @@ public class BoardService {
     User invitee = userAdapter.getUserById(userId); // 초대할 사용자 존재 여부 체크
     boardUserAdapter.BoardUserExists(boardId, userId); // 이미 초대된 사용자 체크
     BoardUser newBoardUser = BoardUser.createBoardUser(
-        board, invitee, Participation.ENABLE, BoardUserRole.ASSIGNEE
+        board, invitee, Participation.ENABLE, BoardUserRole.ASSIGNEE, InvitationStatus.ACCEPTED
     );
     boardUserAdapter.saveBoardUser(newBoardUser);
   }

@@ -58,12 +58,13 @@ public class BoardUser {
         this.invitationStatus = invitationStatus;
     }
     public static BoardUser createBoardUser(Board board, User user, Participation participation,
-        BoardUserRole boardUserRole) {
+        BoardUserRole boardUserRole, InvitationStatus invitationStatus) {
         return BoardUser.builder()
             .board(board)
             .user(user)
             .participation(participation)
             .boardUserRole(boardUserRole)
+            .invitationStatus(invitationStatus)
             .build();
     }
 

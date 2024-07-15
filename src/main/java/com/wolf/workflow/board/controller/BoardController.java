@@ -44,7 +44,7 @@ public class BoardController {
   @ResponseBody
   @PostMapping
   public ResponseEntity<BoardResponseDto> createBoard(
-      AuthenticationUser user,
+      @AuthenticationPrincipal AuthenticationUser user,
       @RequestBody BoardRequestDto requestDto) {
     BoardResponseDto boardResponseDto = boardService.createBoard(
         user, requestDto);
@@ -79,7 +79,7 @@ public class BoardController {
   @ResponseBody
   @DeleteMapping("/{boardId}")
   public ResponseEntity<ApiResponse<String>> deleteBoard(
-      AuthenticationUser user,
+      @AuthenticationPrincipal AuthenticationUser user,
       @PathVariable Long boardId) {
     boardService.deleteBoard(user,boardId);
     return ResponseEntity.status(HttpStatus.OK)
