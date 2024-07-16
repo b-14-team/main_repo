@@ -114,60 +114,60 @@
     </div>
 </div>
 
-<script>
-    var columnIdForFind;
+<!--<script>-->
+<!--    var columnIdForFind;-->
 
-    // 모달 열기
-    function showModal(columnId) {
-        document.getElementById('modal').style.display = 'flex';
-        loadAssignees('taskAssignee'); // 할 일 추가 모달의 작업자 목록 로드
-        columnIdForFind = columnId;
-    }
+<!--    // 모달 열기-->
+<!--    function showModal(columnId) {-->
+<!--        document.getElementById('modal').style.display = 'flex';-->
+<!--        loadAssignees('taskAssignee'); // 할 일 추가 모달의 작업자 목록 로드-->
+<!--        columnIdForFind = columnId;-->
+<!--    }-->
 
-    // 모달 닫기
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-    }
+<!--    // 모달 닫기-->
+<!--    function closeModal() {-->
+<!--        document.getElementById('modal').style.display = 'none';-->
+<!--    }-->
 
-    // 할 일 추가(카드 생성)
-    function addTask() {
-        var title = document.getElementById('taskTitle').value;
-        var status = columnIdForFind;
-        var content = document.getElementById('taskContent').value;
-        var dueDate = document.getElementById('taskDueDate').value;
-        var assignee = document.getElementById('taskAssignee').value;
+<!--    // 할 일 추가(카드 생성)-->
+<!--    function addTask() {-->
+<!--        var title = document.getElementById('taskTitle').value;-->
+<!--        var status = columnIdForFind;-->
+<!--        var content = document.getElementById('taskContent').value;-->
+<!--        var dueDate = document.getElementById('taskDueDate').value;-->
+<!--        var assignee = document.getElementById('taskAssignee').value;-->
 
-        if (!title) {
-            alert("제목은 필수 항목입니다.");
-            return;
-        }
+<!--        if (!title) {-->
+<!--            alert("제목은 필수 항목입니다.");-->
+<!--            return;-->
+<!--        }-->
 
-        // task 객체 생성
-        var task = {
-            title: title,
-            content: content,
-            deadDate: dueDate ? new Date(dueDate).toISOString() : null,
-            assigneeId: assignee ? parseInt(assignee) : null,
-            status: status
-        };
+<!--        // task 객체 생성-->
+<!--        var task = {-->
+<!--            title: title,-->
+<!--            content: content,-->
+<!--            deadDate: dueDate ? new Date(dueDate).toISOString() : null,-->
+<!--            assigneeId: assignee ? parseInt(assignee) : null,-->
+<!--            status: status-->
+<!--        };-->
 
-        // cardDto 객체 생성
-        var cardDto = {
-            title: title,
-            content: content,
-            deadDate: dueDate ? new Date(dueDate).toISOString() : null,
-            assigneeId: assignee ? parseInt(assignee) : null,
-            status: status,
-            tasks: [task]
-        };
+<!--        // cardDto 객체 생성-->
+<!--        var cardDto = {-->
+<!--            title: title,-->
+<!--            content: content,-->
+<!--            deadDate: dueDate ? new Date(dueDate).toISOString() : null,-->
+<!--            assigneeId: assignee ? parseInt(assignee) : null,-->
+<!--            status: status,-->
+<!--            tasks: [task]-->
+<!--        };-->
 
-        addCard(cardDto,columnIdForFind);
-        closeModal();
-    }
+<!--        addCard(cardDto,columnIdForFind);-->
+<!--        closeModal();-->
+<!--    }-->
 
 
 
-</script>
+<!--</script>-->
 
 </body>
 </html>

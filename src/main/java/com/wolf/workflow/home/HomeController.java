@@ -12,8 +12,8 @@ public class HomeController {
     }
 
 
-    @GetMapping("/")
-    public String index() {
+    @GetMapping("/board")
+    public String board() {
         return "board";
     }
 

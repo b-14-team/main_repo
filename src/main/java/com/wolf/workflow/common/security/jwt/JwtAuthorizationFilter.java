@@ -11,7 +11,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,38 +41,30 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
                                     FilterChain filterChain) throws ServletException, IOException {
         String accessTokenValue = jwtUtil.getAccessTokenFromHeader(req);
-        log.info("현재주소 : "+req.getRequestURL().toString());
-                // 인가 요청시 확인 없이 넘어가야하는 주소들 추가
-        log.info("access token 검증");
+        log.info("현재주소 : " + req.getRequestURL().toString());
+        // 인가 요청시 확인 없이 넘어가야하는 주소들 추가
+        log.info("access token 검증: {}", accessTokenValue);
         if (StringUtils.hasText(accessTokenValue)
-                && jwtUtil.validateToken(req, accessTokenValue)
-                && !req.getRequestURL().toString().equals("http://localhost:8080/")
-                && !req.getRequestURL().toString().equals("http://localhost:8080/login")
-                && !req.getRequestURL().toString().equals("http://localhost:8080/signup")
-                && !req.getRequestURL().toString().contains("/css/")
-                && !req.getRequestURL().toString().contains("/js/")
-                && !req.getRequestURL().toString().contains("/favicon.ico")
-        ) {
-            log.info("refresh token 검증");
+                && jwtUtil.validateToken(req, accessTokenValue)) {
 
-                String email = jwtUtil.getUserInfoFromToken(accessTokenValue).getSubject();
-                User findUser = userAdapter.getUserByEmail(email);
-
-                if (findUser.getRefreshToken() != null) {
-                    if (isValidateUserEmail(email, findUser)) {
-
-                        log.info("Token 인증 완료");
-                        Claims info = jwtUtil.getUserInfoFromToken(accessTokenValue);
-                        setAuthentication(info.getSubject());
-                    }
-                } else {
-                    log.error("유효하지 않는 Refersh Token");
-                    req.setAttribute("exception",
-                            new CustomSecurityException(
-                                    CommonErrorCode.BAD_REQUEST,
-                                    MessageUtil.getMessage("invalid.jwt.signature")));
+            String email = jwtUtil.getUserInfoFromToken(accessTokenValue).getSubject();
+            User findUser = userAdapter.getUserByEmail(email);
+            String refreshTokenValue = findUser.getRefreshToken();
+            log.info("Refresh token 검증: {}", refreshTokenValue);
+            if (refreshTokenValue != null) {
+                if (isValidateUserEmail(email, findUser)) {
+                    log.info("Refresh Token 인증 완료");
+                    Claims info = jwtUtil.getUserInfoFromToken(accessTokenValue);
+                    setAuthentication(info.getSubject());
                 }
+            } else {
+                log.error("Refresh Token is null");
+                req.setAttribute("exception",
+                        new CustomSecurityException(
+                                CommonErrorCode.BAD_REQUEST,
+                                MessageUtil.getMessage("not.found.token")));
             }
+        }
         filterChain.doFilter(req, res);
     }
 
