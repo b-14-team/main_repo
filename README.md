@@ -61,6 +61,7 @@
 ## ERD
 ![화면 캡처 2024-07-15 233950](https://github.com/user-attachments/assets/1f70f7b8-d5ff-491c-a22d-70feafb4141f)
 
+
 ##  🎢 쿼리 최적화
 <details>
 <summary>쿼리 최적화(담당자 카드 전체 조회)</summary>
@@ -84,4 +85,49 @@
 
 <p>
 </details>
+
+=======
+## 최적화
+- 프로그램 성능을 높이기 위해 시도한 것
+
+### 쿼리 최적화
+
+<details>
+<summary>예시 1) 컬럼 ID + 담당자 ID 해당하는 카드 조회</summary>
+
+- 환경 : 400만 카드 데이터
+- 찾은 데이터 수 4 row
+- 조건 : 컬럼 ID + 담당자 ID
+- 최적화 방법 : 인덱싱
+![img_2.png](images/img_2.png)
+- 비교 : 
+- 최적화 전
+![img_3.png](images/img_3.png)
+- 작업 시간 **3s 492 ms**
+- 최적화 후
+![img_1.png](images/img_1.png)
+- 작업 시간 **24ms**
+- 
+</details>
+
+<details>
+
+<summary>예시 2) 담당자 ID로 해당하는 카드 조회</summary>
+
+- 환경 : 400만 카드 데이터
+- 찾은 데이터 수 4 row
+- 조건 : 담당자 ID
+- 최적화 방법 : 인덱싱
+![img_4.png](images/img_4.png)
+- 비교 :
+- 최적화 전
+![img_5.png](images/img_5.png)
+- 작업 시간 **281 ms**
+- 최적화 후
+![img_6.png](images/img_6.png)
+- 작업 시간 **18ms**
+
+</details>
+
+<p>
 
