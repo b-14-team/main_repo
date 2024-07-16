@@ -73,13 +73,13 @@
 - 찾은 데이터 수 4 row
 - 조건 : 컬럼 ID + 담당자 ID
 - 최적화 방법 : 인덱싱
-![img_2.png](img_2.png)
+![img_2.png](images/img_2.png)
 - 비교 : 
 - 최적화 전
-![img_3.png](img_3.png)
+![img_3.png](images/img_3.png)
 - 작업 시간 **3s 492 ms**
 - 최적화 후
-![img_1.png](img_1.png)
+![img_1.png](images/img_1.png)
 - 작업 시간 **24ms**
 - 
 </details>
@@ -92,13 +92,13 @@
 - 찾은 데이터 수 4 row
 - 조건 : 담당자 ID
 - 최적화 방법 : 인덱싱
-![img_4.png](img_4.png)
+![img_4.png](images/img_4.png)
 - 비교 :
 - 최적화 전
-![img_5.png](img_5.png)
+![img_5.png](images/img_5.png)
 - 작업 시간 **281 ms**
 - 최적화 후
-![img_6.png](img_6.png)
+![img_6.png](images/img_6.png)
 - 작업 시간 **18ms**
 
 </details>
